@@ -1,0 +1,214 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quelle est la formule chimique pour le chlorure de sodium (sel de table) ?",
+choices: ["NaCl", "HCl", "NaOH", "H2SO4"],
+correctAnswer: "NaCl"
+},
+
+{
+question: "Quelle est la formule chimique pour le dioxyde de carbone ?",
+choices: ["CO2", "H2O", "NaCl", "SO2"],
+correctAnswer: "CO2"
+},
+
+{
+question: "Quelle est la formule chimique pour le sulfure d'hydrogène ?",
+choices: ["H2S", "CO2", "H2O", "NaCl"],
+correctAnswer: "H2S"
+},
+
+{
+question: "Qu'est-ce qu'un élément chimique ?",
+choices: ["Une substance composée d'atomes de même numéro atomique", "Une substance composée d'atomes de différents numéros atomiques", "Une substance composée de molécules", "Une substance pure"],
+correctAnswer: "Une substance composée d'atomes de même numéro atomique"
+},
+
+{
+question: "Qu'est-ce qu'une molécule ?",
+choices: ["Un ensemble d'atomes liés ensemble par des liaisons covalentes", "Un ensemble d'ions liés ensemble par des forces ioniques", "Un ensemble d'atomes liés ensemble par des forces gravitationnelles", "Un ensemble d'électrons liés ensemble par des forces électrostatiques"],
+correctAnswer: "Un ensemble d'atomes liés ensemble par des liaisons covalentes"
+},
+
+{
+question: "Qu'est-ce qu'un ion ?",
+choices: ["Un atome ayant gagné ou perdu un ou plusieurs électrons", "Un atome ayant gagné ou perdu un ou plusieurs protons", "Un atome ayant gagné ou perdu un ou plusieurs neutrons", "Un atome ayant gagné ou perdu un ou plusieurs photons"],
+correctAnswer: "Un atome ayant gagné ou perdu un ou plusieurs électrons"
+},
+
+{
+question: "Quel est le nom donné à la force de liaison entre deux ions de charge opposée ?",
+choices: ["Liaison covalente", "Liaison ionique", "Liaison métallique", "Liaison hydrogène"],
+correctAnswer: "Liaison ionique"
+},
+
+{
+question: "Quel est le nom donné à l'étude des propriétés et des transformations de la matière ?",
+choices: ["La biologie", "La chimie", "La physique", "La géologie"],
+correctAnswer: "La chimie"
+},
+
+{
+question: "Quel est l'unité de mesure de la masse d'une substance ?",
+choices: ["Le litre", "Le mètre", "Le kilogramme", "Le joule"],
+correctAnswer: "Le kilogramme"
+},
+
+{
+question: "Quel est le nom donné à l'état de la matière qui a une forme définie et un volume constant ?",
+choices: ["L'état solide", "L'état gazeux", "L'état liquide", "L'état plasma"],
+correctAnswer: "L'état solide"
+},
+
+{
+question: "Quel est le nom donné au changement de la forme d'un corps sans modification de sa masse ?",
+choices: ["La sublimation", "La fusion", "La condensation", "La déformation"],
+correctAnswer: "La déformation"
+},
+
+{
+question: "Quel est le nom donné au changement de la forme d'un corps par évaporation à la température ambiante ?",
+choices: ["La sublimation", "La fusion", "La condensation", "La déformation"],
+correctAnswer: "La sublimation"
+},
+
+{
+question: "Quel est le nom donné au changement de la forme d'un corps par solidification à la température ambiante ?",
+choices: ["La sublimation", "La fusion", "La condensation", "La déformation"],
+correctAnswer: "La fusion"
+},
+
+{
+question: "Quel est le nom donné au changement de la forme d'un corps par condensation à la température ambiante ?",
+choices: ["La sublimation", "La fusion", "La condensation", "La déformation"],
+correctAnswer: "La condensation"
+},
+
+{
+question: "Qu'est-ce qu'une solution ?",
+choices: ["Un mélange homogène de deux ou plusieurs substances", "Un mélange hétérogène de deux ou plusieurs substances", "Une substance pure", "Un corps solide"],
+correctAnswer: "Un mélange homogène de deux ou plusieurs substances"
+},
+{
+question: "Quel est le nom de la force de liaison entre deux atomes partageant un ou plusieurs électrons?",
+choices: ["Liaison covalente", "Liaison ionique", "Liaison métallique", "Liaison hydrogène"],
+correctAnswer: "Liaison covalente"
+},
+
+{
+question: "Quel est le nom de la force de liaison entre un atome d'hydrogène et un atome d'un autre élément, formant un composé hydrogène ?",
+choices: ["Liaison covalente", "Liaison ionique", "Liaison métallique", "Liaison hydrogène"],
+correctAnswer: "Liaison hydrogène"
+},
+
+{
+question: "Qu'est-ce qu'un solide cristallin ?",
+choices: ["Un solide dont les atomes sont disposés de manière ordonnée et régulière", "Un solide dont les atomes sont disposés de manière désordonnée et irrégulière", "Un liquide dont les molécules sont disposées de manière ordonnée et régulière", "Un gaz dont les molécules sont disposées de manière ordonnée et régulière"],
+correctAnswer: "Un solide dont les atomes sont disposés de manière ordonnée et régulière"
+},
+
+{
+question: "Qu'est-ce qu'un solide amorphe ?",
+choices: ["Un solide dont les atomes sont disposés de manière ordonnée et régulière", "Un solide dont les atomes sont disposés de manière désordonnée et irrégulière", "Un liquide dont les molécules sont disposées de manière ordonnée et régulière", "Un gaz dont les molécules sont disposées de manière ordonnée et régulière"],
+correctAnswer: "Un solide dont les atomes sont disposés de manière désordonnée et irrégulière"
+},
+
+{
+question: "Qu'est-ce que la diffraction des rayons X ?",
+choices: ["Le phénomène où les rayons X sont diffusés lorsqu'ils traversent un cristal", "Le phénomène où les rayons X sont absorbés par les atomes du cristal", "Le phénomène où les rayons X sont réfléchis par les atomes du cristal", "Le phénomène où les rayons X sont transmis sans être affectés par les atomes du cristal"],
+correctAnswer: "Le phénomène où les rayons X sont diffusés lorsqu'ils traversent un cristal"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
