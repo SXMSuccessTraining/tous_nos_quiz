@@ -1,0 +1,271 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quelle est la formule mathématique pour décrire une onde sinusoïdale stationnaire ?",
+choices: ["y = A cos(kx - ωt + φ)", "y = A sin(kx + ωt + φ)", "y = A cos(kx + ωt + φ)", "y = A sin(kx - ωt + φ)"],
+correctAnswer: "y = A cos(kx - ωt + φ)"
+},
+
+{
+question: "Quel est le nom donné à la fréquence minimale qui peut être perçue par un être humain ?",
+choices: ["Fréquence minimale audible", "Fréquence minimale perçue", "Fréquence seuil d'audition", "Fréquence seuil de perception"],
+correctAnswer: "Fréquence seuil d'audition"
+},
+
+{
+question: "Quel est le nom donné à la bande de fréquences des ondes électromagnétiques utilisée pour les télécommunications mobiles ?",
+choices: ["Bande de fréquences FM", "Bande de fréquences AM", "Bande de fréquences UMTS", "Bande de fréquences LTE"],
+correctAnswer: "Bande de fréquences UMTS"
+},
+
+{
+question: "Quel est le nom donné à la longueur d'onde d'une onde électromagnétique ?",
+choices: ["Lambda", "Gamma", "Delta", "Theta"],
+correctAnswer: "Lambda"
+},
+{
+question: "Qu'est-ce qu'une onde électromagnétique ?",
+choices: ["Une vibration de la matière", "Une perturbation électrique et magnétique dans le vide", "Une vibration mécanique dans un milieu", "Un phénomène quantique"],
+correctAnswer: "Une perturbation électrique et magnétique dans le vide"
+},
+
+{
+question: "Quel est le nom donné à la vitesse d'une onde électromagnétique dans le vide ?",
+choices: ["Vitesse d'onde", "Vitesse de phase", "Vitesse de groupe", "Vitesse de la lumière"],
+correctAnswer: "Vitesse de la lumière"
+},
+
+{
+question: "Quel est l'unité SI de la fréquence d'une onde électromagnétique ?",
+choices: ["Hertz", "Newton", "Joule", "Watt"],
+correctAnswer: "Hertz"
+},
+
+{
+question: "Qu'est-ce qu'une onde stationnaire ?",
+choices: ["Une onde périodique dont l'amplitude reste constante au fil du temps", "Une onde périodique qui s'éteint au fil du temps", "Une onde non périodique qui varie au fil du temps", "Une onde périodique qui s'intensifie au fil du temps"],
+correctAnswer: "Une onde périodique dont l'amplitude reste constante au fil du temps"
+},
+
+{
+question: "Qu'est-ce qu'une onde progressive ?",
+choices: ["Une onde qui se déplace dans une direction", "Une onde qui se déplace dans toutes les directions", "Une onde qui se déplace dans un cercle", "Une onde qui ne se déplace pas"],
+correctAnswer: "Une onde qui se déplace dans une direction"
+},
+
+{
+question: "Qu'est-ce qu'un signal périodique ?",
+choices: ["Un signal qui varie de manière répétitive au fil du temps", "Un signal qui varie de manière aléatoire au fil du temps", "Un signal qui ne varie pas au fil du temps", "Un signal qui varie de manière irrégulière au fil du temps"],
+correctAnswer: "Un signal qui varie de manière répétitive au fil du temps"
+},
+
+{
+question: "Quel est le nom de la transformée de Fourier d'un signal temporel ?",
+choices: ["Transformée de Laplace", "Transformée de Z", "Spectre fréquentiel", "Transformée de Bode"],
+correctAnswer: "Spectre fréquentiel"
+},
+{
+question: "Quel est le nom de la théorie qui décrit le comportement des ondes électromagnétiques dans un milieu diélectrique uniforme ?",
+choices: ["Théorie de Maxwell", "Théorie de la relativité", "Théorie quantique", "Théorie de l'interférence"],
+correctAnswer: "Théorie de Maxwell"
+},
+
+{
+question: "Quel est le nom de l'onde électromagnétique qui se propage dans l'espace vide ?",
+choices: ["Onde sonore", "Onde gravitationnelle", "Onde lumineuse", "Onde radio"],
+correctAnswer: "Onde lumineuse"
+},
+
+{
+question: "Quel est le nom de la vitesse de propagation d'une onde électromagnétique dans le vide ?",
+choices: ["Vitesse du son", "Vitesse de la lumière", "Vitesse de la gravité", "Vitesse de l'électricité"],
+correctAnswer: "Vitesse de la lumière"
+},
+
+{
+question: "Quel est le nom de la fréquence d'une onde électromagnétique qui ne peut pas être vue par l'œil humain ?",
+choices: ["Fréquence infrarouge", "Fréquence ultraviolette", "Fréquence radio", "Fréquence gamma"],
+correctAnswer: "Fréquence infrarouge"
+},
+
+{
+question: "Quel est le nom de la fréquence d'une onde électromagnétique qui peut endommager la peau et les yeux ?",
+choices: ["Fréquence infrarouge", "Fréquence ultraviolette", "Fréquence radio", "Fréquence gamma"],
+correctAnswer: "Fréquence ultraviolette"
+},
+
+{
+question: "Quel est le nom de la longueur d'onde d'une onde électromagnétique qui est utilisée pour la communication sans fil ?",
+choices: ["Longueur d'onde infrarouge", "Longueur d'onde ultraviolette", "Longueur d'onde radio", "Longueur d'onde gamma"],
+correctAnswer: "Longueur d'onde radio"
+},
+
+{
+question: "Quel est le nom de l'onde électromagnétique qui est utilisée pour les rayons X en médecine ?",
+choices: ["Onde infrarouge", "Onde ultraviolette", "Onde radio", "Onde X"],
+correctAnswer: "Onde X"
+},
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la vitesse, la fréquence et la longueur d'onde d'une onde électromagnétique ?",
+choices: ["v = fλ", "f = v/λ", "λ = v/f", "fλ = v"],
+correctAnswer: "v = fλ"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la période d'une onde et sa fréquence ?",
+choices: ["T = 1/f", "f = 1/T", "Tf = 1", "fT = 1"],
+correctAnswer: "T = 1/f"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la fréquence et l'énergie d'une onde électromagnétique ?",
+choices: ["E = hf", "f = E/h", "h = E/f", "hf = E"],
+correctAnswer: "E = hf"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la vitesse d'une onde et sa fréquence dans un milieu donné ?",
+choices: ["v = c/f", "f = c/v", "vc = f", "fv = c"],
+correctAnswer: "v = c/f"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la vitesse d'une onde et sa longueur d'onde dans un milieu donné ?",
+choices: ["v = λf", "f = λv", "vλ = f", "fv = λ"],
+correctAnswer: "v = λf"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la vitesse, la fréquence et la constante de Planck dans le mouvement des particules subatomiques ?",
+choices: ["p = hf", "f = h/p", "h = pf", "hf = p"],
+correctAnswer: "p = hf"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la force électromotrice (EMF), la résistance et le courant électrique ?",
+choices: ["EMF = IR", "I = EMF/R", "R = EMF/I", "IR = EMF"],
+correctAnswer: "EMF = IR"
+},
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la puissance, la tension et le courant électrique ?",
+choices: ["P = IV", "I = P/V", "V = P/I", "IV = P"],
+correctAnswer: "P = IV"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la capacité électrique d'un condensateur, la tension et la charge électrique ?",
+choices: ["C = Q/V", "Q = CV", "V = Q/C", "CQ = V"],
+correctAnswer: "C = Q/V"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la fréquence de coupure d'un filtre passe-bas et sa constante de temps ?",
+choices: ["f_c = 1/2πτ", "τ = 1/2πf_c", "2πf_c = 1/τ", "2πτ = 1/f_c"],
+correctAnswer: "f_c = 1/2πτ"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la puissance acoustique et la pression sonore à une distance donnée d'une source sonore ?",
+choices: ["P = 4πr^2p^2", "p = √(P/(4πr^2))", "r = √(P/(4πp^2))", "4πr^2 = P/p^2"],
+correctAnswer: "P = 4πr^2p^2"
+},
+
+{
+question: "Quel est le nom de la formule mathématique qui décrit la relation entre la vitesse de phase et la fréquence d'une onde sinusoïdale ?",
+choices: ["v_p = 2πf", "f = v_p/2π", "2π = v_p/f", "2πf = v_p"],
+correctAnswer: "v_p = 2πf"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
