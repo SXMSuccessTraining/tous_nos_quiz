@@ -1,0 +1,198 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quelle est la définition mathématique de la fonction logarithme ?",
+choices: ["f(x) = loga(x)", "f(x) = ax", "f(x) = a^x", "f(x) = x/a"],
+correctAnswer: "f(x) = loga(x)"
+},
+{
+question: "Quel est le logarithme de 10 en base 10 ?",
+choices: ["1", "2", "3", "4"],
+correctAnswer: "1"
+},
+{
+question: "Quelle est la formule pour calculer le logarithme en base 10 ?",
+choices: ["log10(x)", "log(x)", "ln(x)", "lg(x)"],
+correctAnswer: "log10(x)"
+},
+{
+question: "Quelle est la formule pour convertir un logarithme en base 10 en un logarithme en base e ?",
+choices: ["ln(x)/log10(e)", "log10(x)/ln(e)", "ln(x)/ln(10)", "log10(x)/log10(e)"],
+correctAnswer: "ln(x)/log10(e)"
+},
+{
+question: "Quelle est la formule pour convertir un logarithme en base e en un logarithme en base 10 ?",
+choices: ["log10(x)/ln(e)", "ln(x)/log10(e)", "log10(x)/log10(e)", "ln(x)/ln(10)"],
+correctAnswer: "log10(x)/ln(e)"
+},
+{
+question: "Quelle est la formule pour le logarithme en base 2 ?",
+choices: ["log2(x)", "log10(x)", "ln(x)", "lg(x)"],
+correctAnswer: "log2(x)"
+},
+{
+question: "Quel est le logarithme en base 10 de 100 ?",
+choices: ["2", "3", "4", "5"],
+correctAnswer: "2"
+},
+{
+question: "Comment déterminer le logarithme d'un nombre en base a ?",
+choices: ["Calculer a^x = n", "Calculer x^a = n", "Calculer x/a = n", "Calculer loga(x) = n"],
+correctAnswer: "Calculer a^x = n"
+},
+{
+question: "Quelle est la formule pour déterminer le logarithme d'un produit ?",
+choices: ["loga(xy) = loga(x) + loga(y)", "loga(xy) = loga(x) - loga(y)", "loga(xy) = loga(x) * loga(y)", "loga(xy) = loga(x) / loga(y)"],
+correctAnswer: "loga(xy) = loga(x) + loga(y)"
+},
+{
+question: "Quelle est la forme canonique de la fonction logarithme népérienne (ln)?",
+choices: ["ln(x)=x", "ln(x)=e^x", "ln(x)=x^e", "ln(x)=x^2"],
+correctAnswer: "ln(x)=e^x"
+},
+{
+question: "Quelle est la propriété de logarithme qui dit que logb(xy) = logb(x) + logb(y)?",
+choices: ["Propriété du produit", "Propriété de la somme", "Propriété de l'exponentielle", "Propriété du quotient"],
+correctAnswer: "Propriété du produit"
+},
+{
+question: "Quel est le résultat de log10 100 ?",
+choices: ["2", "1", "0,1", "10"],
+correctAnswer: "2"
+},
+{
+question: "Quel est le résultat de log2 8 ?",
+choices: ["3", "4", "1,5", "2"],
+correctAnswer: "3"
+},
+{
+question: "Quel est le résultat de log3 9 ?",
+choices: ["3", "2", "1", "0,9"],
+correctAnswer: "2"
+},
+{
+question: "Quel est le logarithme népérien de e ?",
+choices: ["0", "1", "e", "2"],
+correctAnswer: "1"
+},
+{
+question: "Quel est le logarithme népérien de e^3 ?",
+choices: ["3", "1", "e", "e^3"],
+correctAnswer: "3"
+},
+
+{
+question: "Quel est le résultat de log2 16 ?",
+choices: ["4", "3", "2", "1,5"],
+correctAnswer: "4"
+},
+{
+question: "Quel est le résultat de logb b^x = x?",
+choices: ["0", "1", "b", "x"],
+correctAnswer: "x"
+},
+{
+question: "Quelle est la forme générale pour un logarithme avec base a?",
+choices: ["logax", "log(x/a)", "ln(x)/ln(a)", "ln(x)/a"],
+correctAnswer: "logax"
+},
+{
+question: "Quel est le résultat de loga 1 ?",
+choices: ["0", "1", "a", "-1"],
+correctAnswer: "0"
+},
+
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
