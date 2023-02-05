@@ -1,0 +1,201 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quelle est la primitive de la fonction x^3 sur l'intervalle [0,1] ?",
+choices: ["x^4/4 + C", "x^4/4 - C", "x^4/4", "x^3 + C"],
+correctAnswer: "x^4/4 + C"
+},
+{
+question: "Quelle est la primitive de la fonction cos(x) sur l'intervalle [0,π/2] ?",
+choices: ["sin(x) + C", "cos(x) + C", "sin(x) - C", "cos(x) - C"],
+correctAnswer: "sin(x) + C"
+},
+{
+question: "Quelle est la primitive de la fonction sin(x) sur l'intervalle [0,π/2] ?",
+choices: ["-cos(x) + C", "-sin(x) + C", "cos(x) + C", "sin(x) + C"],
+correctAnswer: "-cos(x) + C"
+},
+{
+question: "Quelle est la primitive de la fonction 1/x sur l'intervalle (1,+∞) ?",
+choices: ["ln|x| + C", "ln(x) + C", "-ln|x| + C", "-ln(x) + C"],
+correctAnswer: "ln|x| + C"
+},
+{
+question: "Quelle est la primitive de la fonction e^x sur l'intervalle [0,+∞) ?",
+choices: ["e^x + C", "e^x - C", "ln(e^x) + C", "ln(e^x) - C"],
+correctAnswer: "e^x + C"
+},
+{
+question: "Quelle est la primitive de la fonction x^n sur l'intervalle [0,1] ?",
+choices: ["x^(n+1)/(n+1) + C", "x^(n+1)/(n+1) - C", "x^n/(n+1) + C", "x^n/(n+1) - C"],
+correctAnswer: "x^(n+1)/(n+1) + C"
+},
+{
+question: "Quelle est la primitive de la fonction x sur l'intervalle [0,1] ?",
+choices: ["x^2/2 + C", "x^2/2 - C", "x^2 + C", "x^2 - C"],
+correctAnswer: "x^2/2 + C"
+},
+{
+question: "Quelle est la primitive de la fonction ln(x) sur l'intervalle (0,+∞) ?",
+choices: ["xln(x) - x + C", "xln(x) - x - C", "xln(x) + x + C", "xln(x) + x - C"],
+correctAnswer: "xln(x) - x + C"
+},
+{
+question: "Quelle est la fonction primitive de la fonction f(x) = x^2 ?",
+choices: ["F(x) = x^3/3 + C", "F(x) = x^3 + C", "F(x) = x^2 + C", "F(x) = x^3/2 + C"],
+correctAnswer: "F(x) = x^3/3 + C"
+},
+
+{
+question: "Quelle est la fonction primitive de la fonction f(x) = 1/x ?",
+choices: ["F(x) = ln|x| + C", "F(x) = ln(x) + C", "F(x) = log(x) + C", "F(x) = e^x + C"],
+correctAnswer: "F(x) = ln|x| + C"
+},
+
+{
+question: "Quelle est la fonction primitive de la fonction f(x) = sin(x) ?",
+choices: ["F(x) = -cos(x) + C", "F(x) = cos(x) + C", "F(x) = sin(x) + C", "F(x) = -sin(x) + C"],
+correctAnswer: "F(x) = -cos(x) + C"
+},
+
+{
+question: "Quelle est la fonction primitive de la fonction f(x) = cos(x) ?",
+choices: ["F(x) = sin(x) + C", "F(x) = -sin(x) + C", "F(x) = cos(x) + C", "F(x) = -cos(x) + C"],
+correctAnswer: "F(x) = sin(x) + C"
+},
+
+{
+question: "Quelle est la fonction primitive de la fonction f(x) = e^x ?",
+choices: ["F(x) = e^x + C", "F(x) = ln(x) + C", "F(x) = -ln(x) + C", "F(x) = ln(e^x) + C"],
+correctAnswer: "F(x) = e^x + C"
+},
+
+{
+question: "Quel est le but de la détermination d'une primitive ?",
+choices: ["Calculer une intégrale", "Trouver une fonction dérivable", "Déterminer un minimum local", "Déterminer un maximum local"],
+correctAnswer: "Calculer une intégrale"
+},
+{
+question: "Qu'est-ce qu'une primitive ?",
+choices: ["Une fonction dérivable", "Une fonction non dérivable", "Une intégrale", "Une équation"],
+correctAnswer: "Une intégrale"
+},
+{
+question: "Quelle est la méthode pour déterminer une primitive d'une fonction continue sur un intervalle ?",
+choices: ["La méthode de la dérivation", "La méthode de la détermination d'une limite", "La méthode du change de variable", "La méthode des antiderivées partielles"],
+correctAnswer: "La méthode des antiderivées partielles"
+},
+{
+question: "Quel est le rapport entre la dérivée d'une fonction et sa primitive ?",
+choices: ["La dérivée d'une fonction est égale à sa primitive", "La primitive d'une fonction est égale à sa dérivée", "Il n'y a pas de rapport entre la dérivée d'une fonction et sa primitive", "La dérivée d'une primitive est égale à la fonction d'origine"],
+correctAnswer: "La dérivée d'une primitive est égale à la fonction d'origine"
+},
+{
+question: "Quand une fonction est-elle considérée comme étant une primitive d'une autre fonction ?",
+choices: ["Lorsqu'elle est dérivable", "Lorsqu'elle est non dérivable", "Lorsqu'elle est continue sur un intervalle", "Lorsqu'elle est dérivable et dérivée de la fonction d'origine"],
+correctAnswer: "Lorsqu'elle est dérivable et dérivée de la fonction d'origine"
+},
+{
+question: "Qu'est-ce que la formule générale d'une primitive ?",
+choices: ["Une équation mathématique", "Une intégrale", "Une fonction dérivable", "Une équation de dérivation"],
+correctAnswer: "Une équation mathématique"
+},
+{
+question: "Comment déterminer une primitive sur un intervalle particulier ?",
+choices: ["En utilisant la formule générale", "En utilisant la dérivation", "En utilisant une table de valeurs", "En utilisant les antiderivées partielles"],
+correctAnswer: "En utilisant les antiderivées partielles"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
