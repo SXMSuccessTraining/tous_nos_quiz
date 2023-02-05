@@ -1,0 +1,199 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quel est le nombre de façons de choisir k objets parmi n objets distincts ?",
+choices: ["C(n,k)", "C(k,n)", "P(n,k)", "P(k,n)"],
+correctAnswer: "C(n,k)"
+},
+{
+question: "Quelle est la formule pour le nombre de permutations d'un ensemble de n éléments ?",
+choices: ["P(n)", "C(n)", "C(n,k)", "A(n)"],
+correctAnswer: "P(n)"
+},
+{
+question: "Quelle est la formule pour le nombre de combinaisons de k éléments pris parmi un ensemble de n éléments ?",
+choices: ["C(n,k)", "P(n,k)", "C(k,n)", "A(n,k)"],
+correctAnswer: "C(n,k)"
+},
+{
+question: "Quelle est la définition de l'espérance mathématique ?",
+choices: ["La moyenne des valeurs d'une variable aléatoire", "La somme des probabilités de tous les événements", "La moyenne pondérée des valeurs d'une variable aléatoire", "La somme des valeurs d'une variable aléatoire"],
+correctAnswer: "La moyenne pondérée des valeurs d'une variable aléatoire"
+},
+{
+question: "Quelle est la formule pour la variance d'une variable aléatoire X ?",
+choices: ["Var(X) = E(X^2) - (E(X))^2", "Var(X) = (E(X))^2 - E(X^2)", "Var(X) = E(X) - E(X^2)", "Var(X) = E(X^2) / E(X)"],
+correctAnswer: "Var(X) = E(X^2) - (E(X))^2"
+},
+{
+question: "Quelle est la formule pour la covariance de deux variables aléatoires X et Y ?",
+choices: ["Cov(X,Y) = E((X-E(X))(Y-E(Y)))", "Cov(X,Y) = E((X+E(X))(Y+E(Y)))", "Cov(X,Y) = E(XY) - E(X)E(Y)", "Cov(X,Y) = E(X)E(Y) - E(XY)"],
+correctAnswer: "Cov(X,Y) = E(XY) - E(X)E(Y)"
+},
+{
+question: "Si l'événement A a une probabilité de 0,6 de se produire, quelle est la probabilité que cet événement ne se produise pas ?",
+choices: ["0,4", "0,6", "1", "1,6"],
+correctAnswer: "0,4"
+},
+{
+question: "Si P(A) = 0,8 et P(B) = 0,6, quelle est la probabilité que les événements A et B se produisent simultanément ?",
+choices: ["0,48", "0,5", "0,58", "0,8"],
+correctAnswer: "0,48"
+},
+{
+question: "Qu'est-ce que le complémentaire d'un événement A ?",
+choices: ["L'ensemble de tous les événements qui se produisent en même temps qu'A", "L'ensemble de tous les événements qui ne se produisent pas", "L'ensemble de tous les événements qui se produisent seulement quand A ne se produit pas", "L'ensemble de tous les événements qui se produisent seulement quand A se produit"],
+correctAnswer: "L'ensemble de tous les événements qui se produisent seulement quand A ne se produit pas"
+},
+{
+question: "Si P(A) = 0,7, P(B) = 0,3 et P(A ∩ B) = 0,1, quelle est la probabilité de l'union des événements A et B ?",
+choices: ["0,4", "0,8", "0,9", "1"],
+correctAnswer: "0,8"
+},
+{
+question: "Dans un lancement de deux dés, quelle est la probabilité d'obtenir une somme de 7 ?",
+choices: ["1/12", "1/6", "1/9", "1/3"],
+correctAnswer: "1/6"
+},
+{
+question: "Dans un échantillon de 10 personnes, combien y a-t-il de façons d'en choisir 4 ?",
+choices: ["45", "120", "210", "252"],
+correctAnswer: "210"
+},
+{
+question: "Quelle est la formule pour trouver le coefficient binomial C(n, k) ?",
+choices: ["n!/(k!(n-k)!)", "(n-k)!/k!", "k!/(n!(n-k)!)", "(n-k)!/(n!k!)"],
+correctAnswer: "n!/(k!(n-k)!)"
+},
+{
+question: "Quelle est la définition formelle de la probabilité d'un événement A ?",
+choices: ["La fréquence relative de l'occurrence de l'événement A dans un grand nombre de répétitions de l'expérience", "Le nombre total d'éléments dans l'espace échantillon", "Le nombre d'éléments dans l'espace échantillon associé à l'événement A", "La somme de toutes les probabilités d'événements"],
+correctAnswer: "La fréquence relative de l'occurrence de l'événement A dans un grand nombre de répétitions de l'expérience"
+},
+
+{
+question: "Si deux événements A et B sont indépendants, quelle est la probabilité de l'intersection de A et B ?",
+choices: ["0", "1", "P(A) + P(B)", "P(A) * P(B)"],
+correctAnswer: "P(A) * P(B)"
+},
+
+{
+question: "Si deux événements A et B sont mutuellement exclusifs, quelle est la probabilité de l'union de A et B ?",
+choices: ["0", "1", "P(A) + P(B)", "P(A) * P(B)"],
+correctAnswer: "P(A) + P(B)"
+},
+
+{
+question: "Quelle est la définition formelle d'une variable aléatoire discrète ?",
+choices: ["Une fonction qui associe une valeur numérique à chaque événement possible dans l'espace échantillon", "Une fonction qui décrit la probabilité d'occurrence de chaque événement possible dans l'espace échantillon", "Une fonction qui décrit la probabilité de chaque valeur numérique associée à chaque événement possible dans l'espace échantillon", "Toutes les réponses sont correctes"],
+correctAnswer: "Une fonction qui associe une valeur numérique à chaque événement possible dans l'espace échantillon"
+},
+{
+question: "Si une maladie est diagnostiquée chez un patient avec une fiabilité de 90%, quelle est la probabilité que le patient ait réellement la maladie s'il est diagnostiqué positif ?",
+choices: ["90%", "10%", "18%", "82%"],
+correctAnswer: "90%"
+},
+{
+question: "Le nombre d'accidents d'avion enregistrés est distribué selon une loi de Poisson de paramètre lambda = 2. Quelle est la probabilité d'avoir exactement 3 accidents d'avion en une année ?",
+choices: ["0.180", "0.135", "0.270", "0.054"],
+correctAnswer: "0.135"
+},
+{
+question: "Le nombre de défaillances d'un certain type de pompe est distribué selon une loi exponentielle de paramètre lambda = 0,5. Quelle est la probabilité qu'une pompe ne tombe pas en panne dans les premiers 2 mois de fonctionnement ?",
+choices: ["0.632", "0.368", "0.867", "0.135"],
+correctAnswer: "0.867"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
