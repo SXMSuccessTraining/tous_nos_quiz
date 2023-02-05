@@ -1,0 +1,211 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quelle est la définition de la limite d'une fonction en un point x0 ?",
+choices: ["La fonction se rapproche indéfiniment de la valeur y0 en s'approchant de x0", "La fonction s'éloigne indéfiniment de la valeur y0 en s'éloignant de x0", "La fonction se rapproche de la valeur y0 en s'éloignant de x0", "La fonction ne change pas de valeur en s'approchant de x0"],
+correctAnswer: "La fonction se rapproche indéfiniment de la valeur y0 en s'approchant de x0"
+},
+
+{
+question: "Quel est le symbole utilisé pour définir une limite ?",
+choices: ["lim", "sum", "int", "diff"],
+correctAnswer: "lim"
+},
+
+{
+question: "Que signifie la notation f(x) = L pour une fonction f(x) et une limite L ?",
+choices: ["La fonction f(x) atteint la valeur L en x0", "La fonction f(x) ne dépasse pas la valeur L", "La fonction f(x) s'approche indéfiniment de la valeur L en x0", "La fonction f(x) ne change pas de valeur en x0"],
+correctAnswer: "La fonction f(x) s'approche indéfiniment de la valeur L en x0"
+},
+
+{
+question: "Quelle est la définition de la continuité d'une fonction f(x) en un point x0 ?",
+choices: ["La fonction ne change pas de valeur en x0", "La fonction s'approche indéfiniment de la valeur L en x0", "La fonction ne présente pas de saut en x0", "Toutes les réponses sont correctes"],
+correctAnswer: "Toutes les réponses sont correctes"
+},
+
+{
+question: "Quelle est la condition nécessaire pour que la fonction f(x) soit continue en x0 ?",
+choices: ["La limite de f(x) en x0 existe et est égale à f(x0)", "La limite de f(x) en x0 n'existe pas", "La limite de f(x) en x0 existe mais n'est pas égale à f(x0)", "La limite de f(x) en x0 n'a pas besoin d'exister"],
+correctAnswer: "La limite de f(x) en x0 existe et est égale à f(x0)"
+},
+{
+question: "Quelle est la définition de la dérivée première d'une fonction ?",
+choices: ["La limite du rapport entre le changement de la fonction et le changement de la variable indépendante", "La valeur de la fonction en un point donné", "La pente de la tangente à la courbe représentative de la fonction en un point donné", "La courbe représentative de la fonction"],
+correctAnswer: "La limite du rapport entre le changement de la fonction et le changement de la variable indépendante"
+},
+
+{
+question: "Quel est le symbole utilisé pour définir la dérivée première d'une fonction ?",
+choices: ["f'", "df", "dy/dx", "d2f/dx2"],
+correctAnswer: "f'"
+},
+
+{
+question: "Quelle est la définition de la dérivée seconde d'une fonction ?",
+choices: ["La dérivée première de la dérivée première de la fonction", "La dérivée de la fonction en un point donné", "La pente de la courbe représentative de la fonction en un point donné", "La courbe représentative de la fonction"],
+correctAnswer: "La dérivée première de la dérivée première de la fonction"
+},
+
+{
+question: "Quel est le symbole utilisé pour définir la dérivée seconde d'une fonction ?",
+choices: ["f''", "d2f/dx2", "df'", "dy/dx"],
+correctAnswer: "f''"
+},
+
+{
+question: "Quelle est la définition de la fonction exponentielle e^x ?",
+choices: ["La fonction dont la dérivée est égale à elle-même", "La fonction dont la dérivée est égale à la constante e", "La fonction qui décrit la croissance exponentielle", "Toutes les réponses sont correctes"],
+correctAnswer: "Toutes les réponses sont correctes"
+},
+
+{
+question: "Quel est le coefficient directeur de la tangente à la courbe représentative de la fonction exponentielle e^x en un point x0 ?",
+choices: ["e^x0", "e", "x0", "0"],
+correctAnswer: "e^x0"
+},
+{
+question: "Quelle est la définition de la limite d'une fonction en un point donné ?",
+choices: ["La valeur approchée de la fonction en un point donné", "La valeur approchée de la dérivée première en un point donné", "La valeur approchée de la dérivée seconde en un point donné", "La valeur vers laquelle tend la fonction lorsque la variable indépendante tend vers un certain nombre"],
+correctAnswer: "La valeur vers laquelle tend la fonction lorsque la variable indépendante tend vers un certain nombre"
+},
+
+{
+question: "Quelle est la définition de la continuité d'une fonction ?",
+choices: ["La condition nécessaire pour que la limite de la fonction en un point donné soit égale à la valeur de la fonction en ce point", "La condition nécessaire pour que la fonction soit dérivable en un point donné", "La condition nécessaire pour que la dérivée première soit continue en un point donné", "Toutes les réponses sont correctes"],
+correctAnswer: "La condition nécessaire pour que la limite de la fonction en un point donné soit égale à la valeur de la fonction en ce point"
+},
+
+{
+question: "Quelle est la définition d'une fonction dérivable en un point donné ?",
+choices: ["Une fonction pour laquelle la dérivée première existe en un point donné", "Une fonction pour laquelle la dérivée seconde existe en un point donné", "Une fonction pour laquelle la dérivée première et la dérivée seconde existent en un point donné", "Une fonction pour laquelle la dérivée première est continue en un point donné"],
+correctAnswer: "Une fonction pour laquelle la dérivée première existe en un point donné"
+},
+
+{
+question: "Quelle est la définition d'une fonction strictement croissante sur un intervalle donné ?",
+choices: ["Une fonction pour laquelle la dérivée première est positive sur cet intervalle", "Une fonction pour laquelle la dérivée seconde est positive sur cet intervalle", "Une fonction pour laquelle la dérivée première est négative sur cet intervalle", "Une fonction pour laquelle la dérivée seconde est négative sur cet intervalle"],
+correctAnswer: "Une fonction pour laquelle la dérivée première est positive sur cet intervalle"
+},
+{
+question: "Quelle est la définition d'une fonction strictement décroissante sur un intervalle donné ?",
+choices: ["Une fonction pour laquelle la dérivée première est négative sur cet intervalle", "Une fonction pour laquelle la dérivée seconde est positive sur cet intervalle", "Une fonction pour laquelle la dérivée première est positive sur cet intervalle", "Une fonction pour laquelle la dérivée seconde est négative sur cet intervalle"],
+correctAnswer: "Une fonction pour laquelle la dérivée première est négative sur cet intervalle"
+},
+
+{
+question: "Quelle est la définition d'une fonction plate sur un intervalle donné ?",
+choices: ["Une fonction pour laquelle la dérivée première est nulle sur cet intervalle", "Une fonction pour laquelle la dérivée seconde est nulle sur cet intervalle", "Une fonction pour laquelle la dérivée première et la dérivée seconde sont nulles sur cet intervalle", "Une fonction pour laquelle la dérivée première et la dérivée seconde sont positives sur cet intervalle"],
+correctAnswer: "Une fonction pour laquelle la dérivée première est nulle sur cet intervalle"
+},
+
+{
+question: "Quelle est la définition d'une fonction de réciproque d'une fonction f(x) ?",
+choices: ["La fonction g(x) telle que g(f(x)) = x pour tout x dans l'ensemble de définition de f", "La fonction g(x) telle que g(f(x)) = 1/x pour tout x dans l'ensemble de définition de f", "La fonction g(x) telle que f(g(x)) = 1/x pour tout x dans l'ensemble de définition de g", "La fonction g(x) telle que f(g(x)) = x pour tout x dans l'ensemble de définition de g"],
+correctAnswer: "La fonction g(x) telle que g(f(x)) = x pour tout x dans l'ensemble de définition de f"
+},
+{
+question: "Quel est le but de la dérivation ?",
+choices: ["Trouver le minimum d'une fonction", "Trouver le maximum d'une fonction", "Trouver la vitesse à un point", "Trouver le taux de variation à un point"],
+correctAnswer: "Trouver le taux de variation à un point"
+},
+
+{
+question: "Qu'est-ce qu'une fonction continue ?",
+choices: ["Une fonction qui n'a pas de trous", "Une fonction qui n'a pas de sauts", "Une fonction qui est dérivable en tout point", "Une fonction qui est dérivable en tout point sauf en un seul"],
+correctAnswer: "Une fonction qui n'a pas de sauts"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
