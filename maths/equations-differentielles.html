@@ -1,0 +1,202 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quelle est la méthode pour résoudre une équation différentielle linéaire homogène à coefficients constants?",
+choices: ["La méthode de la substitution", "La méthode de la variation de constantes", "La méthode du substitut homogène", "La méthode du produit intérieur"],
+correctAnswer: "La méthode du substitut homogène"
+},
+{
+question: "Quelle est la définition d'une équation différentielle linéaire?",
+choices: ["Une équation qui peut être exprimée sous la forme P(x)y' + Q(x)y = R(x)", "Une équation qui peut être exprimée sous la forme y' = f(x, y)", "Une équation qui peut être exprimée sous la forme y = f(x)", "Une équation qui peut être exprimée sous la forme y = f(x, y, y')"],
+correctAnswer: "Une équation qui peut être exprimée sous la forme P(x)y' + Q(x)y = R(x)"
+},
+{
+question: "Qu'est-ce qu'une solution générale d'une équation différentielle?",
+choices: ["Une fonction qui donne toutes les solutions particulières d'une équation différentielle", "Une fonction qui donne une solution particulière d'une équation différentielle", "Une équation différentielle homogène", "Une équation différentielle non homogène"],
+correctAnswer: "Une fonction qui donne toutes les solutions particulières d'une équation différentielle"
+},
+{
+question: "Quelle est la définition d'une équation différentielle ordinaire (EDO)?",
+choices: ["Une équation différentielle qui ne dépend que d'une seule variable", "Une équation différentielle qui dépend de plusieurs variables", "Une équation différentielle non homogène", "Une équation différentielle homogène"],
+correctAnswer: "Une équation différentielle qui ne dépend que d'une seule variable"
+},
+{
+question: "Comment peut-on résoudre une EDO du premier ordre à coefficient constant?",
+choices: ["En utilisant la méthode de la substitution", "En utilisant la méthode de la variation de constantes", "En utilisant la méthode du substitut homogène", "En utilisant la méthode du produit intérieur"],
+correctAnswer: "En utilisant la méthode de la substitution"
+},
+{
+question: "Quelle est la définition de l'équation différentielle ordinaire (EDO) ?",
+choices: ["Une équation qui décrit l'évolution d'une fonction à l'aide d'une dérivée", "Une équation qui relie une variable dépendante à une ou plusieurs variables indépendantes", "Une équation qui décrit la relation entre une variable dépendante et une ou plusieurs variables indépendantes avec un terme dérivé", "Une équation qui décrit l'évolution d'une variable indépendante à l'aide d'une dérivée"],
+correctAnswer: "Une équation qui décrit l'évolution d'une fonction à l'aide d'une dérivée"
+},
+
+{
+question: "Quelle est la méthode de résolution la plus courante pour les EDO ?",
+choices: ["La méthode d'Euler", "La méthode de Laplace", "La méthode de Runge-Kutta", "La méthode de LaGrange"],
+correctAnswer: "La méthode de Runge-Kutta"
+},
+
+{
+question: "Quelle est la définition de la condition initiale pour une EDO ?",
+choices: ["La condition qui décrit l'état initial d'un système", "La condition qui décrit la relation entre les variables dépendantes et indépendantes à un temps donné", "La condition qui décrit la valeur de la dérivée à un temps donné", "La condition qui décrit la valeur de la fonction à un temps donné"],
+correctAnswer: "La condition qui décrit la valeur de la fonction à un temps donné"
+},
+
+{
+question: "Quelle est la définition de la solution générale pour une EDO ?",
+choices: ["La fonction qui décrit toutes les solutions possible pour une EDO", "La dérivée de la fonction qui décrit toutes les solutions possible pour une EDO", "La condition qui décrit toutes les solutions possible pour une EDO", "La somme de toutes les solutions possible pour une EDO"],
+correctAnswer: "La fonction qui décrit toutes les solutions possible pour une EDO"
+},
+{
+question: "Quelle est la définition d'une équation différentielle du premier ordre ?",
+choices: ["Une équation qui décrit la dépendance entre une fonction y et son dérivée première y'", "Une équation qui décrit la dépendance entre une fonction y et deux de ses dérivées successives y' et y''", "Une équation qui décrit la dépendance entre une fonction y et une de ses dérivées partielles y'", "Une équation qui décrit la dépendance entre deux fonctions y et x"],
+correctAnswer: "Une équation qui décrit la dépendance entre une fonction y et son dérivée première y'"
+},
+
+{
+question: "Quelle est la méthode la plus utilisée pour résoudre une équation différentielle du premier ordre ?",
+choices: ["La méthode de separation de variables", "La méthode de substitution de variables", "La méthode de substitution de fonctions", "La méthode d'intégration"],
+correctAnswer: "La méthode de separation de variables"
+},
+
+{
+question: "Comment déterminer la condition initiale d'une équation différentielle ?",
+choices: ["En connaissant la valeur de y pour x=0", "En connaissant la valeur de x pour y=0", "En connaissant la valeur de y pour x=infini", "En connaissant la valeur de x pour y=infini"],
+correctAnswer: "En connaissant la valeur de y pour x=0"
+},
+
+{
+question: "Quel est le but de la méthode de Laplace pour résoudre une équation différentielle ?",
+choices: ["Transformez l'équation différentielle en une équation algébrique à coefficients constants", "Transformez l'équation différentielle en une équation différentielle du second ordre", "Transformez l'équation différentielle en une équation intégrale", "Transformez l'équation différentielle en une équation différentielle du premier ordre"],
+correctAnswer: "Transformez l'équation différentielle en une équation algébrique à coefficients constants"
+},
+{
+question: "Quelle est la solution générale pour une équation différentielle du premier ordre homogène de la forme dy/dx + p(x)y = 0 ?",
+choices: ["y = Ce^(∫p(x)dx)", "y = Ce^(-∫p(x)dx)", "y = Ce^(∫1/p(x)dx)", "y = Ce^(-∫1/p(x)dx)"],
+correctAnswer: "y = Ce^(∫p(x)dx)"
+},
+{
+question: "Comment déterminer le nombre de solutions pour une équation différentielle linéaire du premier ordre ?",
+choices: ["La méthode de Cauchy-Lipschitz", "La théorie des matrices", "Le théorème de Liouville", "L'intégration par parties"],
+correctAnswer: "La méthode de Cauchy-Lipschitz"
+},
+{
+question: "Que représente la courbe des phases pour une équation différentielle du premier ordre linéaire ?",
+choices: ["La représentation graphique des solutions de l'équation", "La représentation graphique des fonctions homogènes", "La représentation graphique des fonctions particulières", "La représentation graphique des fonctions fondamentales"],
+correctAnswer: "La représentation graphique des solutions de l'équation"
+},
+{
+question: "Quel est le nom donné à une équation différentielle du second ordre qui peut être écrite sous la forme d'une somme de deux équations différentielles du premier ordre ?",
+choices: ["Équation différentielle linéaire", "Système d'équations différentielles linéaires", "Équation différentielle non linéaire", "Système d'équations différentielles non linéaires"],
+correctAnswer: "Système d'équations différentielles linéaires"
+},
+{
+question: "Que représente la constante C pour une équation différentielle homogène du premier ordre ?",
+choices: ["La constante d'intégration", "La constante de décomposition", "La constante de proportionnalité", "La constante d'amplitude"],
+correctAnswer: "La constante d'intégration"
+},
+{
+question: "Quel est le nom de la méthode permettant de déterminer la solution particulière pour une équation différentielle non homogène ?",
+choices: ["Méthode de Laplace", "Méthode de Green", "Méthode de variation de constante", "Méthode de superposition"],
+correctAnswer: "Méthode de variation de constante"
+},
+{
+question: "Quelle est la définition d'une équation différentielle ordinaire?",
+choices: ["Une équation qui décrit comment une quantité change par rapport à une autre quantité", "Une équation qui décrit la relation entre deux grandeurs", "Une équation qui décrit la dépendance d'une quantité à une autre quantité", "Une équation qui décrit la dépendance d'une quantité au temps"],
+correctAnswer: "Une équation qui décrit la dépendance d'une quantité à une autre quantité"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
