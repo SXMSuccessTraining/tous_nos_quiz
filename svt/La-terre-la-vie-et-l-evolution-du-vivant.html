@@ -1,0 +1,212 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quel est le processus responsable de la divergence des populations génétiques au cours du temps ?",
+choices: ["L'isolement géographique", "La sélection naturelle", "La mutation", "L'hybridation"],
+correctAnswer: "L'isolement géographique"
+},
+
+{
+question: "Quel est l'effet de la mutation sur l'expression des gènes ?",
+choices: ["Aucun effet", "Changement dans la séquence ADN", "Changement dans la forme des protéines produites", "Tous les réponses ci-dessus"],
+correctAnswer: "Changement dans la séquence ADN"
+},
+
+{
+question: "Quel est l'effet de la sélection naturelle sur la variation génétique d'une population ?",
+choices: ["Réduction de la variation génétique", "Augmentation de la variation génétique", "Aucun effet", "Dépend de la direction de la sélection"],
+correctAnswer: "Réduction de la variation génétique"
+},
+
+{
+question: "Quel est le rôle des transferts horizontaux dans la complexification des génomes ?",
+choices: ["Introduction de nouveaux gènes", "Suppression de gènes", "Aucun effet", "Réduction de la taille du génome"],
+correctAnswer: "Introduction de nouveaux gènes"
+},
+
+{
+question: "Quelles sont les conséquences de l'endosymbioses sur les génomes des organismes impliqués ?",
+choices: ["Fusion de leurs génomes", "Introduction de nouveaux gènes", "Réduction de la taille des génomes", "Toutes les réponses ci-dessus"],
+correctAnswer: "Toutes les réponses ci-dessus"
+},
+
+{
+question: "Quel est le temps géologique mesuré en années ?",
+choices: ["Temps relatif", "Temps absolu", "Temps linéaire", "Temps subjectif"],
+correctAnswer: "Temps absolu"
+},
+{
+question: "Quel est le phénomène qui permet la transmutation de l'information génétique d'une génération à l'autre ?",
+choices: ["Réplication", "Transcription", "Translation", "Transfert"],
+correctAnswer: "Réplication"
+},
+
+{
+question: "Que sont les gènes homozygotes ?",
+choices: ["Des gènes qui ont une seule allèle", "Des gènes qui ont deux allèles identiques", "Des gènes qui ont deux allèles différents", "Des gènes qui ont trois allèles"],
+correctAnswer: "Des gènes qui ont deux allèles identiques"
+},
+
+{
+question: "Que sont les gènes hétérozygotes ?",
+choices: ["Des gènes qui ont une seule allèle", "Des gènes qui ont deux allèles identiques", "Des gènes qui ont deux allèles différents", "Des gènes qui ont trois allèles"],
+correctAnswer: "Des gènes qui ont deux allèles différents"
+},
+
+{
+question: "Quel est le phénomène qui permet la production de protéines à partir de l'information génétique ?",
+choices: ["Réplication", "Transcription", "Translation", "Transfert"],
+correctAnswer: "Translation"
+},
+
+{
+question: "Qu'est-ce qu'un transfert horizontal de gènes ?",
+choices: ["Le transfert d'information génétique entre deux générations successives d'une même espèce", "Le transfert d'information génétique entre des individus d'espèces différentes", "Le transfert d'information génétique entre des cellules de la même espèce", "Le transfert d'information génétique entre des cellules de différentes espèces"],
+correctAnswer: "Le transfert d'information génétique entre des individus d'espèces différentes"
+},
+
+{
+question: "Qu'est-ce qu'une endosymbiose ?",
+choices: ["Une symbiose où un organisme est inclus à l'intérieur d'un autre", "Une symbiose où deux organismes sont inclus l'un à l'intérieur de l'autre", "Une symbiose où deux organismes se touchent sans se pénétrer", "Une symbiose où deux organismes se touchent sans aucun contact"],
+correctAnswer: "Une symbiose où un organisme est inclus à l'intérieur d'un autre"
+},
+{
+question: "Qu'est-ce qui détermine la variabilité génétique d'une population ?",
+choices: ["La mutation", "La sélection naturelle", "La migration", "L'hybridation"],
+correctAnswer: "La mutation"
+},
+
+{
+question: "Quel est le processus qui sélectionne les individus les plus adaptés à leur environnement ?",
+choices: ["La mutation", "La sélection naturelle", "La migration", "L'hybridation"],
+correctAnswer: "La sélection naturelle"
+},
+
+{
+question: "Quel est le processus qui permet la diffusion de gènes d'une population à une autre ?",
+choices: ["La mutation", "La sélection naturelle", "La migration", "L'hybridation"],
+correctAnswer: "La migration"
+},
+
+{
+question: "Qu'est-ce qui peut déclencher une évolution au sein d'une population ?",
+choices: ["La mutation", "La sélection naturelle", "La migration", "Les deux A et B"],
+correctAnswer: "Les deux A et B"
+},
+
+{
+question: "Quelles sont les unités de base de l'information génétique ?",
+choices: ["Les protéines", "Les acides aminés", "Les bases nitrogenées", "Les lipides"],
+correctAnswer: "Les bases nitrogenées"
+},
+
+{
+question: "Quelles sont les conséquences d'une mutation sur l'information génétique ?",
+choices: ["Elle peut entraîner une modification de la structure ou de la fonction des protéines produites", "Elle peut entraîner une modification de la structure ou de la fonction des lipides produits", "Elle peut entraîner une modification de la structure ou de la fonction des acides aminés produits", "Elle ne peut entraîner aucune modification"],
+correctAnswer: "Elle peut entraîner une modification de la structure ou de la fonction des protéines produites"
+},
+
+{
+question: "Quel est le rôle des roches dans la compréhension du passé géologique de la Terre ?",
+choices: ["Elles fournissent des informations sur la géologie de la Terre à une époque donnée", "Elles fournissent des informations sur la biologie de la Terre à une époque donnée", "Elles fournissent des informations sur la météorologie de la Terre à une époque donnée", "Elles ne fournissent aucune information"],
+correctAnswer: "Elles fournissent des informations sur la géologie de la Terre à une époque donnée"
+},
+{
+question: "Que peut-on déduire des caractéristiques des roches sédimentaires ?",
+choices: ["La géologie de la Terre à une époque donnée", "La biologie de la Terre à une époque donnée", "La météorologie de la Terre à une époque donnée", "Les trois réponses ci-dessus"],
+correctAnswer: "Les trois réponses ci-dessus"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
