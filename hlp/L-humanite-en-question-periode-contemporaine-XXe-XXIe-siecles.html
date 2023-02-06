@@ -1,0 +1,212 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "De quoi parle l'oeuvre de Guillaume Apollinaire ?",
+choices: ["De l'histoire et de la violence", "De la création, des continuités et des ruptures", "De l'humain et de ses limites", "Des expressions de la sensibilité"],
+correctAnswer: "De la création, des continuités et des ruptures"
+},
+
+{
+question: "En quoi la pensée de Friedrich Engels se distingue-t-elle des autres auteurs du chapitre 2 de HLP ?",
+choices: ["Il met en avant la création, les continuités et les ruptures", "Il souligne l'importance de l'histoire et de la violence", "Il s'intéresse à l'humain et à ses limites", "Il évoque les expressions de la sensibilité"],
+correctAnswer: "Il souligne l'importance de l'histoire et de la violence"
+},
+
+{
+question: "Qui est l'auteur de L'Étranger ?",
+choices: ["Kant", "Weber", "Camus", "Hemingway"],
+correctAnswer: "Camus"
+},
+{
+question: "Quel est l'effet sur la société de la littérature de science-fiction ?",
+choices: ["Elle est considérée comme sans importance", "Elle peut inspirer de nouvelles technologies", "Elle peut provoquer la peur des futurs possibles", "Elle peut inciter à la réflexion sur les limites morales et éthiques"],
+correctAnswer: "Elle peut inciter à la réflexion sur les limites morales et éthiques"
+},
+
+{
+question: "Quelle est la thématique centrale de L'Étranger de Camus ?",
+choices: ["La création, les continuités et les ruptures", "L'histoire et la violence", "L'humain et ses limites", "Les expressions de la sensibilité"],
+correctAnswer: "L'humain et ses limites"
+},
+
+{
+question: "Quel est le livre d'Antoine de Saint-Exupéry qui a pour thème principal l'humain et ses limites ?",
+choices: ["Le Petit Prince", "Vol de Nuit", "Terre des Hommes", "Cité de l'ombre"],
+correctAnswer: "Le Petit Prince"
+},
+
+{
+question: "Qui est l'auteur de 1984 ?",
+choices: ["Valéry", "Saint-Exupery", "Orwell", "Barjavel"],
+correctAnswer: "Orwell"
+},
+
+{
+question: "De quoi parle le livre Brave New World d'Aldous Huxley ?",
+choices: ["De la création, les continuités et les ruptures", "De l'histoire et la violence", "De l'humain et ses limites", "Des expressions de la sensibilité"],
+correctAnswer: "De l'humain et ses limites"
+},
+
+{
+question: "Qui est l'auteur de La Nuit des temps ?",
+choices: ["Valéry", "Saint-Exupery", "Orwell", "Barjavel"],
+correctAnswer: "Barjavel"
+},
+{
+question: "Quelle est la définition de la création artistique dans le mouvement futuriste ?",
+choices: ["Une révolution contre les formes artistiques traditionnelles", "Un retour aux formes artistiques classiques", "Une célébration de la modernité industrielle et technologique", "Un mouvement artistique marginal"],
+correctAnswer: "Une célébration de la modernité industrielle et technologique"
+},
+
+{
+question: "Quelles sont les caractéristiques de l'histoire et de la violence selon les auteurs mentionnés dans le chapitre 2 de HLP ?",
+choices: ["Une analyse critique de la société moderne", "Une célébration de la violence", "Une justification de la violence", "Une réflexion sur les conséquences de la violence"],
+correctAnswer: "Une analyse critique de la société moderne"
+},
+
+{
+question: "Quelles sont les limites de l'être humain selon les auteurs mentionnés dans le chapitre 2 de HLP ?",
+choices: ["Les limites de la conscience humaine", "Les limites de la technologie", "Les limites de la société", "Les limites de la morale"],
+correctAnswer: "Les limites de la conscience humaine"
+},
+
+{
+question: "En quoi consiste la réflexion sur les limites de l'être humain selon les auteurs mentionnés dans le chapitre 2 de HLP ?",
+choices: ["Une exploration de la nature humaine", "Une critique de la technologie moderne", "Une réflexion sur la place de l'être humain dans le monde", "Une réflexion sur les possibilités futures de l'être humain"],
+correctAnswer: "Une réflexion sur la place de l'être humain dans le monde"
+},
+
+{
+question: "Quelle est la relation entre histoire et violence selon les auteurs au programme ?",
+choices: ["L'histoire est la cause de la violence", "La violence est la cause de l'histoire", "L'histoire et la violence sont deux phénomènes indépendants", "L'histoire et la violence sont étroitement liées"],
+correctAnswer: "L'histoire et la violence sont étroitement liées"
+},
+{
+question: "Quelle est la théorie de Weber sur la domination ?",
+choices: ["La théorie de la domination éthique", "La théorie de la domination économique", "La théorie de la domination politique", "La théorie de la domination sociale"],
+correctAnswer: "La théorie de la domination politique"
+},
+
+{
+question: "Quelle est la position de Céline sur l'histoire et la violence ?",
+choices: ["Il pense que l'histoire est nécessairement violente", "Il pense que l'histoire est nécessairement paisible", "Il pense que l'histoire peut être violente dans certaines situations", "Il ne prend pas de position sur l'histoire et la violence"],
+correctAnswer: "Il pense que l'histoire est nécessairement violente"
+},
+
+{
+question: "Comment Valéry définit-il les limites de l'humain ?",
+choices: ["Les limites de l'humain sont déterminées par ses capacités intellectuelles", "Les limites de l'humain sont déterminées par ses capacités physiques", "Les limites de l'humain sont déterminées par ses émotions", "Les limites de l'humain ne peuvent pas être déterminées"],
+correctAnswer: "Les limites de l'humain sont déterminées par ses capacités intellectuelles"
+},
+
+{
+question: "Quelle est la position d'Orwell sur l'humanité et ses limites ?",
+choices: ["Il pense que l'humanité a de nombreuses limites qu'elle doit surmonter", "Il pense que l'humanité a très peu de limites", "Il pense que l'humanité n'a aucune limite", "Il ne prend pas de position sur les limites de l'humanité"],
+correctAnswer: "Il pense que l'humanité a de nombreuses limites qu'elle doit surmonter"
+},
+
+{
+question: "Quel est le thème central de l'oeuvre d'Apollinaire ?",
+choices: ["La modernité et la rupture avec les traditions", "La tradition et la continuité avec le passé", "La violence et l'histoire", "L'humanité et ses limites"],
+correctAnswer: "La modernité et la rupture avec les traditions"
+},
+
+{
+question: "Qu'est-ce que la théorie du surréalisme développée par Breton ?",
+choices: ["Une théorie sur l'art et la culture", "Une théorie sur la politique", "Une théorie sur la psychologie", "Une théorie sur la philosophie"],
+correctAnswer: "Une théorie sur l'art et la culture"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
