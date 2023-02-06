@@ -1,0 +1,207 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quel est le principal organe de photosynthèse chez les plantes à fleurs ?",
+choices: ["Les feuilles", "Les tiges", "Les racines", "Les fleurs"],
+correctAnswer: "Les feuilles"
+},
+
+{
+question: "Qu'est-ce qui caractérise une plante domestiquée par rapport à une plante sauvage ?",
+choices: ["La présence de fleurs", "La taille plus petite", "Les propriétés génétiques qui ont été sélectionnées pour répondre à des besoins humains", "La présence de fruits"],
+correctAnswer: "Les propriétés génétiques qui ont été sélectionnées pour répondre à des besoins humains"
+},
+
+{
+question: "Qu'est-ce qui détermine la qualité de la production de matière organique chez une plante ?",
+choices: ["Le type de sol", "La température", "L'ensoleillement", "Les trois réponses ci-dessus"],
+correctAnswer: "Les trois réponses ci-dessus"
+},
+
+{
+question: "Comment la reproduction asexuée se différencie-t-elle de la reproduction sexuée chez les plantes ?",
+choices: ["La reproduction asexuée ne nécessite pas la formation de graines", "La reproduction sexuée nécessite la formation de graines", "La reproduction asexuée ne nécessite pas la formation de pollen", "La reproduction sexuée nécessite la formation de pollen"],
+correctAnswer: "La reproduction asexuée ne nécessite pas la formation de graines"
+},
+
+{
+question: "Qu'est-ce que les données de sédimentologie peuvent révéler sur les variations climatiques passées ?",
+choices: ["La nature des précipitations", "La température moyenne", "Les conditions atmosphériques", "Les trois réponses ci-dessus"],
+correctAnswer: "Les trois réponses ci-dessus"
+},
+
+{
+question: "Qu'est-ce que les données de la géologie peuvent révéler sur les variations climatiques passées ?",
+choices: ["Les fluctuations des niveaux d'océan", "La végétation", "Les conditions atmosphériques", "Les deux premières réponses"],
+correctAnswer: "Les deux premières réponses"
+},
+{
+question: "Quel est le rôle principal des feuilles dans la plante ?",
+choices: ["La photosynthèse", "La respiration", "La production de nutriments", "La régulation de la température"],
+correctAnswer: "La photosynthèse"
+},
+{
+question: "Quel est le processus par lequel les plantes produisent de la matière organique ?",
+choices: ["La photosynthèse", "La respiration", "La digestion", "La nutrition"],
+correctAnswer: "La photosynthèse"
+},
+{
+question: "Comment les plantes peuvent-elles se reproduire ?",
+choices: ["Seulement par la reproduction sexuée", "Seulement par la reproduction asexuée", "Par la reproduction sexuée et asexuée", "Par la reproduction méiotique"],
+correctAnswer: "Par la reproduction sexuée et asexuée"
+},
+{
+question: "Qu'est-ce qui permet de reconstituer les variations climatiques passées ?",
+choices: ["Les données historiques", "Les modèles climatiques", "Les études de la biosphère", "Les archives de glace"],
+correctAnswer: "Les archives de glace"
+},
+{
+question: "Comment les variations climatiques passées peuvent-elles aider à comprendre le climat actuel ?",
+choices: ["En fournissant des données historiques", "En permettant de mesurer la résilience climatique", "En montrant les conséquences potentielles des changements futurs", "Toutes les réponses sont correctes"],
+correctAnswer: "Toutes les réponses sont correctes"
+},
+{
+question: "Comment les scientifiques mesurent-ils les variations climatiques passées ?",
+choices: ["En utilisant des sondes de température", "En examinant les données historiques", "En étudiant les archives de glace", "En utilisant des modèles climatiques"],
+correctAnswer: "En étudiant les archives de glace"
+},
+{
+question: "Qu'est-ce que la photosynthèse ?",
+choices: ["Le processus par lequel les plantes produisent de la matière organique", "Le processus par lequel les plantes produisent de l'énergie", "Le processus par lequel les plantes produisent de l'air", "Le processus par lequel les plantes produisent de l'eau"],
+correctAnswer: "Le processus par lequel les plantes produisent de la matière organique"
+},
+{
+question: "Quel est l'objectif de la domestication des plantes?",
+choices: ["Améliorer les rendements", "Modifier l'apparence des plantes", "Toutes les réponses sont correctes"],
+correctAnswer: "Toutes les réponses sont correctes"
+},
+
+{
+question: "Quel est le rôle de la chlorophylle dans les plantes?",
+choices: ["Capture de la lumière solaire pour la photosynthèse", "Stockage de l'énergie", "Transport de nutriments"],
+correctAnswer: "Capture de la lumière solaire pour la photosynthèse"
+},
+
+{
+question: "Quelle est la principale différence entre la reproduction sexuée et la reproduction asexuée chez les plantes?",
+choices: ["La reproduction sexuée implique la fusion de cellules reproductrices", "La reproduction asexuée implique la fusion de cellules reproductrices", "Il n'y a pas de différence"],
+correctAnswer: "La reproduction sexuée implique la fusion de cellules reproductrices"
+},
+
+{
+question: "Qu'est-ce que l'effet de serre?",
+choices: ["Un phénomène qui contribue à réchauffer la planète", "Un phénomène qui contribue à refroidir la planète", "Un phénomène qui n'a pas d'effet sur la température de la planète"],
+correctAnswer: "Un phénomène qui contribue à réchauffer la planète"
+},
+
+{
+question: "Quelles sont les principales causes des variations climatiques passées?",
+choices: ["Variations de l'orbite de la Terre autour du Soleil", "Variations de l'activité solaire", "Variations de la composition de l'atmosphère"],
+correctAnswer: "Variations de l'orbite de la Terre autour du Soleil"
+},
+
+{
+question: "Qu'est-ce qu'une période interglaciaire?",
+choices: ["Une période de refroidissement de la Terre", "Une période de réchauffement de la Terre", "Une période de stabilité climatique"],
+correctAnswer: "Une période de réchauffement de la Terre"
+},
+
+{
+question: "Quelle est la source principale de la vapeur d'eau dans l'atmosphère?",
+choices: ["Les océans", "Les continents", "Les glaciers"],
+correctAnswer: "Les océans"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
