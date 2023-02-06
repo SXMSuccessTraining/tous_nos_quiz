@@ -1,0 +1,196 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Qu'est-ce qu'un réflexe ?",
+choices: ["Un comportement inconscient et rapide en réponse à un stimulus", "Une réaction lentement déclenchée suite à un stress", "Une adaptation comportementale à long terme", "Un mécanisme de défense contre les menaces"],
+correctAnswer: "Un comportement inconscient et rapide en réponse à un stimulus"
+},
+{
+question: "Qu'est-ce que la contraction musculaire ?",
+choices: ["Un mouvement contrôlé par les muscles", "Une réaction de détente musculaire", "Un mouvement aléatoire des muscles", "Une réaction de tension musculaire"],
+correctAnswer: "Une réaction de tension musculaire"
+},
+{
+question: "Quels sont les apports énergétiques nécessaires aux activités musculaires ?",
+choices: ["Glucides, protéines, graisses et eau", "Protéines, minéraux et vitamines", "Glucides, graisses et eau", "Glucides, protéines et graisses"],
+correctAnswer: "Glucides, protéines, graisses et eau"
+},
+{
+question: "Quel est le rôle du contrôle des flux de glucose dans le corps ?",
+choices: ["Assurer une réserve suffisante d'énergie pour les activités musculaires", "Prévenir la déshydratation", "Stabiliser la pression artérielle", "Réguler la respiration"],
+correctAnswer: "Assurer une réserve suffisante d'énergie pour les activités musculaires"
+},
+{
+question: "Quel est le rôle des réflexes dans la communication nerveuse ?",
+choices: ["Ils permettent une réponse rapide et automatique à un stimulus externe", "Ils sont impliqués dans la mémorisation et l'apprentissage", "Ils contrôlent la respiration", "Ils n'ont aucun rôle"],
+correctAnswer: "Ils permettent une réponse rapide et automatique à un stimulus externe"
+},
+{
+question: "Quel est l'objectif de l'adaptabilité de l'organisme face au stress aigu ?",
+choices: ["Maintenir l'homéostasie de l'organisme", "Provocater des modifications structurelles permanentes dans l'organisme", "Déclencher un coma", "Stimuler la croissance"],
+correctAnswer: "Maintenir l'homéostasie de l'organisme"
+},
+{
+question: "Quelles sont les sources d'énergie nécessaires aux activités musculaires ?",
+choices: ["Glucose et acides gras", "Protéines et graisses", "Sucres complexes et minéraux", "Eau et fibres"],
+correctAnswer: "Glucose et acides gras"
+},
+{
+question: "Quel est le rôle du contrôle des flux de glucose dans les activités musculaires ?",
+choices: ["Assurer la disponibilité constante d'énergie pour les muscles", "Réguler la production d'insuline", "Contrôler la croissance des muscles", "Stimuler la production de lactate"],
+correctAnswer: "Assurer la disponibilité constante d'énergie pour les muscles"
+},
+{
+question: "Quel est le mécanisme impliqué dans le stress aigu ?",
+choices: ["La libération d'hormones de stress", "La dépolarisation de la membrane neuronale", "La production de cytokines", "La stimulation des récepteurs musculaires"],
+correctAnswer: "La libération d'hormones de stress"
+},
+{
+question: "Comment le système nerveux contrôle-t-il la contraction musculaire ?",
+choices: ["En envoyant des influx nerveux aux muscles", "En produisant des hormones musculaires", "En modulant la production d'énergie", "En régulant la circulation sanguine"],
+correctAnswer: "En envoyant des influx nerveux aux muscles"
+},
+{
+question: "Qu'est-ce qui définit un stress aigu ?",
+choices: ["Une réponse physiologique à un stimulus intense de courte durée", "Une réponse physiologique à un stimulus modéré de longue durée", "Une réponse immunologique à une infection", "Une réponse hormonale à une grossesse"],
+correctAnswer: "Une réponse physiologique à un stimulus intense de courte durée"
+},
+{
+question: "Quel est le lien entre le stress aigu et l'adaptabilité de l'organisme ?",
+choices: ["Le stress aigu stimule l'adaptabilité de l'organisme", "Le stress aigu inhibe l'adaptabilité de l'organisme", "Il n'y a pas de lien entre le stress aigu et l'adaptabilité de l'organisme", "Le stress aigu dépend de l'adaptabilité de l'organisme"],
+correctAnswer: "Le stress aigu stimule l'adaptabilité de l'organisme"
+},
+{
+question: "Quel est le processus par lequel une information nerveuse passe de neurone à neurone ?",
+choices: ["La stimulation", "La réflexion", "La neurotransmission", "La transmutation"],
+correctAnswer: "La neurotransmission"
+},
+{
+question: "Quelle est la principale source d'énergie pour les activités musculaires ?",
+choices: ["Les glucides", "Les graisses", "Les protéines", "Les minéraux"],
+correctAnswer: "Les glucides"
+},
+{
+question: "Quel est le nom de l'hormone qui aide à contrôler les niveaux de glucose dans le sang ?",
+choices: ["L'insuline", "La noradrénaline", "La dopamine", "L'histamine"],
+correctAnswer: "L'insuline"
+},
+{
+question: "Quel est le rôle principal des réflexes dans le corps ?",
+choices: ["Protéger l'organisme en réponse à un danger", "Maintenir l'équilibre et la coordination", "Réguler les niveaux d'énergie", "Reguler les niveaux de glucose"],
+correctAnswer: "Protéger l'organisme en réponse à un danger"
+},
+{
+question: "Qu'est-ce qui cause la contraction musculaire ?",
+choices: ["Les influx nerveux", "Les secrétions hormonales", "Les signaux sonores", "Les secrétions de sucre"],
+correctAnswer: "Les influx nerveux"
+},
+{
+question: "Quel est le nom des molécules produites par les muscles pendant l'exercice qui peuvent causer la fatigue musculaire ?",
+choices: ["Les radicaux libres", "Les neurotransmetteurs", "Les hormones", "Les enzymes"],
+correctAnswer: "Les radicaux libres"
+},
+{
+question: "Quel est le rôle de l'adrénaline dans la réponse au stress ?",
+choices: ["Stimuler la libération de glucose dans le sang", "Stimuler la contraction musculaire", "Ralentir les fonctions vitales", "Réduire les niveaux d'énergie"],
+correctAnswer: "Stimuler la libération de glucose dans le sang"
+},
+{
+question: "Qu'est-ce qui peut déclencher la réponse au stress ?",
+choices: ["Des situations stressantes", "Des stimuli agréables", "Des fluctuations hormonales", "Des modifications climatiques"],
+correctAnswer: "Des situations stressantes"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
