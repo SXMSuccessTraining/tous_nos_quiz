@@ -1,0 +1,213 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "What is the purpose of travel?",
+choices: ["To learn about different cultures and ways of life", "To escape from everyday life", "To see new and exotic places", "All of the above"],
+correctAnswer: "All of the above"
+},
+
+{
+question: "What is the impact of travel on personal growth and development?",
+choices: ["Travel expands one's horizons and leads to personal growth and development", "Travel has no impact on personal growth and development", "Travel hinders personal growth and development", "None of the above"],
+correctAnswer: "Travel expands one's horizons and leads to personal growth and development"
+},
+
+{
+question: "What is the role of travel in shaping cultural and societal perceptions?",
+choices: ["Travel helps shape cultural and societal perceptions by introducing individuals to different ways of life and cultures", "Travel has no impact on cultural and societal perceptions", "Travel restricts cultural and societal perceptions", "None of the above"],
+correctAnswer: "Travel helps shape cultural and societal perceptions by introducing individuals to different ways of life and cultures"
+},
+
+{
+question: "What is the significance of frontiers in shaping human history?",
+choices: ["Frontiers have played a major role in shaping human history by providing opportunities for exploration, expansion, and conflict", "Frontiers have no impact on human history", "Frontiers have only had a negative impact on human history", "None of the above"],
+correctAnswer: "Frontiers have played a major role in shaping human history by providing opportunities for exploration, expansion, and conflict"
+},
+
+{
+question: "What is the relationship between borders and nationalism?",
+choices: ["Borders are a physical manifestation of nationalism", "Borders have no impact on nationalism", "Borders restrict nationalism", "None of the above"],
+correctAnswer: "Borders are a physical manifestation of nationalism"
+},
+
+{
+question: "What is the impact of territorial expansion on human society?",
+choices: ["Territorial expansion has led to the growth and development of human society", "Territorial expansion has had no impact on human society", "Territorial expansion has hindered the growth and development of human society", "None of the above"],
+correctAnswer: "Territorial expansion has led to the growth and development of human society, but also often involved conflict and displacement of people and cultures."
+},
+
+{
+question: "What is the relationship between travel and the formation of cultural identity?",
+choices: ["Travel has a significant impact on the formation of cultural identity", "Travel has no impact on the formation of cultural identity", "Travel restricts the formation of cultural identity", "None of the above"],
+correctAnswer: "Travel has a significant impact on the formation of cultural identity"
+},
+
+{
+question: "What is the impact of globalization on territorial borders and frontiers?",
+choices: ["Globalization has led to the blurring of territorial borders and frontiers", "Globalization has strengthened territorial borders and frontiers", "Globalization has no impact on territorial borders and frontiers", "None of the above"],
+correctAnswer: "Globalization has led to the blurring of territorial borders and frontiers"
+},
+
+{
+question: "What is the impact of travel on national economies?",
+choices: ["Travel can have a positive impact on national economies through the creation of jobs in the travel and tourism industry", "Travel has no impact on national economies", "Travel has a negative impact on national economies", "None of the above"],
+correctAnswer: "Travel can have a positive impact on national economies through the creation of jobs in the travel and tourism industry"
+},
+
+{
+question: "What is the significance of the Silk Road in shaping cultural exchange and globalization?",
+choices: ["The Silk Road played a significant role in shaping cultural exchange and globalization by connecting people and cultures from Asia to Europe", "The Silk Road had no impact on cultural exchange and globalization", "The Silk Road restricted cultural exchange and globalization", "None of the above"],
+correctAnswer: "The Silk Road played a significant role in shaping cultural exchange and globalization by connecting people and cultures from Asia to Europe"
+},
+
+{
+question: "What is the relationship between territorial borders and human migration?",
+choices: ["Territorial borders have a significant impact on human migration", "Territorial borders have no impact on human migration", "Territorial borders restrict human migration", "None of the above"],
+correctAnswer: "Territorial borders have a significant impact on human migration"
+},
+
+{
+question: "What is the impact of borders on the preservation of cultural heritage?",
+choices: ["Borders can have a positive impact on the preservation of cultural heritage by creating designated cultural areas", "Borders have no impact on the preservation of cultural heritage", "Borders restrict the preservation of cultural heritage", "None of the above"],
+correctAnswer: "Borders can have a positive impact on the preservation of cultural heritage by creating designated cultural areas"
+},
+
+{
+question: "What is the impact of territorial disputes on international relations?",
+choices: ["Territorial disputes can lead to tensions and conflicts in international relations", "Territorial disputes have no impact on international relations", "Territorial disputes promote cooperation in international relations", "None of the above"],
+correctAnswer: "Territorial disputes can lead to tensions and conflicts in international relations"
+},
+{
+question: "What is the impact of tourism on local communities and the environment?",
+choices: ["Tourism can have a positive impact on local communities and the environment by creating jobs and promoting sustainable development", "Tourism has no impact on local communities and the environment", "Tourism can have a negative impact on local communities and the environment", "None of the above"],
+correctAnswer: "Tourism can have a positive impact on local communities and the environment by creating jobs and promoting sustainable development"
+},
+
+{
+question: "What is the role of travel in the spread of diseases across borders?",
+choices: ["Travel can facilitate the spread of diseases across borders", "Travel has no impact on the spread of diseases", "Travel restricts the spread of diseases", "None of the above"],
+correctAnswer: "Travel can facilitate the spread of diseases across borders"
+},
+
+{
+question: "What is the impact of borders on the movement of goods and trade?",
+choices: ["Borders can impact the movement of goods and trade by creating barriers to trade", "Borders have no impact on the movement of goods and trade", "Borders promote the movement of goods and trade", "None of the above"],
+correctAnswer: "Borders can impact the movement of goods and trade by creating barriers to trade"
+},
+
+{
+question: "What is the impact of territorial borders on the development of transportation infrastructure?",
+choices: ["Territorial borders can impact the development of transportation infrastructure by creating barriers to the movement of goods and people", "Territorial borders have no impact on the development of transportation infrastructure", "Territorial borders promote the development of transportation infrastructure", "None of the above"],
+correctAnswer: "Territorial borders can impact the development of transportation infrastructure by creating barriers to the movement of goods and people"
+},
+
+{
+question: "What is the impact of territorial borders on the security of nations and the protection of their citizens?",
+choices: ["Territorial borders can impact the security of nations and the protection of their citizens", "Territorial borders have no impact on the security of nations and the protection of their citizens", "Territorial borders promote the security of nations and the protection of their citizens", "None of the above"],
+correctAnswer: "Territorial borders can impact the security of nations and the protection of their citizens"
+},
+
+{
+question: "What is the role of international organizations in the management of territorial borders and frontiers?",
+choices: ["International organizations play a significant role in the management of territorial borders and frontiers through the negotiation of agreements and the resolution of disputes", "International organizations have no role in the management of territorial borders and frontiers", "International organizations restrict the management of territorial borders and frontiers", "None of the above"],
+correctAnswer: "International organizations play a significant role in the management of territorial borders and frontiers through the negotiation of agreements and the resolution of disputes"
+},
+{
+question: "What is the impact of territorial borders on cultural exchange and integration?",
+choices: ["Territorial borders can impact cultural exchange and integration by creating barriers to the flow of people, ideas, and cultural products", "Territorial borders have no impact on cultural exchange and integration", "Territorial borders promote cultural exchange and integration", "None of the above"],
+correctAnswer: "Territorial borders can impact cultural exchange and integration by creating barriers to the flow of people, ideas, and cultural products"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
