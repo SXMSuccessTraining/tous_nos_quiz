@@ -1,0 +1,212 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Qu'est-ce que la justice sociale?",
+choices: ["Un système économique", "Une politique environnementale", "Une distribution équitable des ressources", "Une institution judiciaire"],
+correctAnswer: "Une distribution équitable des ressources"
+},
+
+{
+question: "Quel est l'objectif principal des politiques d'environnement?",
+choices: ["Réduire les inégalités économiques", "Protéger la biodiversité", "Stabiliser les marchés financiers", "Promouvoir la croissance économique"],
+correctAnswer: "Protéger la biodiversité"
+},
+
+{
+question: "Quelle est la principale cause des inégalités sociales?",
+choices: ["Le manque de formation professionnelle", "L'inégalité des salaires", "La discrimination", "Le déficit budgétaire"],
+correctAnswer: "L'inégalité des salaires"
+},
+
+{
+question: "Comment peut-on définir le changement climatique?",
+choices: ["Un phénomène naturel", "Une conséquence des activités humaines", "Une fluctuation cyclique du climat", "Un effet secondaire du développement économique"],
+correctAnswer: "Une conséquence des activités humaines"
+},
+
+{
+question: "Quel est le principal gaz à effet de serre produit par les activités humaines?",
+choices: ["Le dioxyde de carbone", "Le méthane", "Le protoxyde d'azote", "Le monoxyde de carbone"],
+correctAnswer: "Le dioxyde de carbone"
+},
+
+{
+question: "Qu'est-ce que la mobilité sociale?",
+choices: ["Le mouvement des populations entre différents pays", "Le passage d'un statut social à un autre", "Le changement de profession", "Le transfert de patrimoine"],
+correctAnswer: "Le passage d'un statut social à un autre"
+},
+
+{
+question: "Quel est l'impact du changement climatique sur les écosystèmes?",
+choices: ["L'augmentation de la biodiversité", "La stabilisation des écosystèmes", "La réduction de la biodiversité", "La création de nouveaux écosystèmes"],
+correctAnswer: "La réduction de la biodiversité"
+},
+{
+question: "Quelle est la principale cause du changement climatique?",
+choices: ["Les activités humaines", "Les activités volcaniques", "Les variations naturelles du climat", "Les impacts de la lune sur la Terre"],
+correctAnswer: "Les activités humaines"
+},
+
+{
+question: "Quel est l'objectif de la Convention-cadre des Nations unies sur les changements climatiques (CCNUCC) ?",
+choices: ["Stabiliser les concentrations de gaz à effet de serre dans l'atmosphère", "Augmenter les concentrations de gaz à effet de serre dans l'atmosphère", "Diminuer les concentrations de gaz à effet de serre dans l'atmosphère", "Ne pas prendre en compte les gaz à effet de serre"],
+correctAnswer: "Stabiliser les concentrations de gaz à effet de serre dans l'atmosphère"
+},
+
+{
+question: "Qu'est-ce que la justice sociale ?",
+choices: ["L'équité dans la distribution des richesses", "L'égalité des droits pour tous", "La prévention de la pauvreté", "La réduction des inégalités"],
+correctAnswer: "L'équité dans la distribution des richesses"
+},
+
+{
+question: "Quelle est la principale cause des inégalités sociales ?",
+choices: ["La discrimination", "Le manque d'éducation", "Le manque d'emploi", "L'absence de protections sociales"],
+correctAnswer: "La discrimination"
+},
+
+{
+question: "Qu'est-ce que le travail précaire ?",
+choices: ["Un travail à temps partiel", "Un travail sans contrat", "Un travail sans protection sociale", "Un travail à temps plein"],
+correctAnswer: "Un travail sans contrat"
+},
+
+{
+question: "Quel est l'objectif de la politique environnementale ?",
+choices: ["Protéger l'environnement", "Polluer l'environnement", "Ignorer l'environnement", "Détruire l'environnement"],
+correctAnswer: "Protéger l'environnement"
+},
+{
+question: "Quelle est la principale cause du changement climatique ?",
+choices: ["Les activités humaines", "Les variations naturelles du climat", "Les activités extraterrestres", "Les éruptions volcaniques"],
+correctAnswer: "Les activités humaines"
+},
+
+{
+question: "Quelles sont les principales conséquences du changement climatique sur l'environnement ?",
+choices: ["L'augmentation de la température moyenne", "La diminution de la quantité de pluie", "L'élévation du niveau de la mer", "Toutes les réponses ci-dessus"],
+correctAnswer: "Toutes les réponses ci-dessus"
+},
+
+{
+question: "Quel est le rôle des politiques publiques pour lutter contre le changement climatique ?",
+choices: ["Encourager les énergies renouvelables", "Réglementer les émissions de gaz à effet de serre", "Soutenir les industries polluantes", "Aucun rôle"],
+correctAnswer: "Encourager les énergies renouvelables" et "Réglementer les émissions de gaz à effet de serre"
+},
+
+{
+question: "Quelles sont les principales inégalités sociales auxquelles la société française est confrontée ?",
+choices: ["Les inégalités salariales", "Les inégalités éducatives", "Les inégalités d'accès à la santé", "Toutes les réponses ci-dessus"],
+correctAnswer: "Toutes les réponses ci-dessus"
+},
+
+{
+question: "Quel est le rôle de l'Etat dans la lutte contre les inégalités sociales ?",
+choices: ["Mettre en place des politiques redistributives", "Encourager la mobilité sociale", "Maintenir les inégalités sociales", "Aucun rôle"],
+correctAnswer: "Mettre en place des politiques redistributives" et "Encourager la mobilité sociale"
+},
+
+{
+question: "Quelles sont les conséquences économiques des inégalités sociales ?",
+choices: ["Un coût économique pour la société", "Une amélioration de la croissance économique", "Un impact négatif sur la consommation", "Aucun impact"],
+correctAnswer: "Un coût économique pour la société" et "Un impact négatif sur la consommation"
+},
+{
+question: "Quel est le but principal de la Convention Cadre des Nations unies sur les Changements Climatiques (CCNUCC) ?",
+choices: ["Eliminer complètement les émissions de gaz à effet de serre", "Mettre en place un système de trading de droits d'émission de carbone", "Promouvoir la coopération internationale pour faire face aux défis posés par le changement climatique", "Toutes les réponses ci-dessus sont correctes"],
+correctAnswer: "Promouvoir la coopération internationale pour faire face aux défis posés par le changement climatique"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
