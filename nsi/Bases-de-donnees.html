@@ -1,0 +1,213 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quelle est la définition d'une base de données ?",
+choices: ["Un ensemble de données organisées de manière logique pour une utilisation efficace", "Un système informatique pour stocker et gérer des données", "Un programme pour visualiser des données"],
+correctAnswer: "Un ensemble de données organisées de manière logique pour une utilisation efficace"
+},
+
+{
+question: "Quel est le but d'un système de gestion de base de données (SGBD) ?",
+choices: ["Gérer les données d'une base de données", "Créer des graphiques à partir de données", "Modifier le code source d'une base de données"],
+correctAnswer: "Gérer les données d'une base de données"
+},
+
+{
+question: "Quel est le type de relation le plus courant entre deux tables dans une base de données relationnelle ?",
+choices: ["Une relation un à un", "Une relation un à plusieurs", "Une relation plusieurs à plusieurs"],
+correctAnswer: "Une relation un à plusieurs"
+},
+
+{
+question: "Que signifie le terme normalisation en bases de données ?",
+choices: ["Diviser une table en plusieurs tables plus petites pour éliminer les dépendances redondantes", "Rassembler plusieurs tables en une seule pour faciliter la gestion des données", "Ajouter des données redondantes pour améliorer les performances"],
+correctAnswer: "Diviser une table en plusieurs tables plus petites pour éliminer les dépendances redondantes"
+},
+
+{
+question: "Quel est le but de la première normalisation (1NF) ?",
+choices: ["Supprimer les répétitions de données en utilisant des clés étrangères", "Assurer que chaque colonne d'une table contient une valeur unique", "Diviser une table en plusieurs tables plus petites pour éliminer les dépendances redondantes"],
+correctAnswer: "Assurer que chaque colonne d'une table contient une valeur unique"
+},
+
+{
+question: "Que signifie le terme index en bases de données ?",
+choices: ["Un moyen rapide d'accéder à une valeur spécifique dans une table", "Un moyen de stocker des données redondantes pour améliorer les performances", "Un moyen de stocker des informations de sécurité pour une base de données"],
+correctAnswer: "Un moyen rapide d'accéder à une valeur spécifique dans une table"
+},
+{
+question: "Quelle est la définition de l'intégrité référentielle ?",
+choices: ["L'ensemble des contraintes qui s'appliquent aux données d'une base de données", "La qualité des données stockées dans une base de données", "L'assurance que les relations entre les différentes tables d'une base de données sont correctes"],
+correctAnswer: "L'assurance que les relations entre les différentes tables d'une base de données sont correctes"
+},
+{
+question: "Quel est le but de l'indexation dans une base de données ?",
+choices: ["Améliorer la vitesse de recherche de données", "Ralentir la vitesse de recherche de données", "Ne pas avoir d'impact sur la vitesse de recherche de données"],
+correctAnswer: "Améliorer la vitesse de recherche de données"
+},
+{
+question: "Quel est le rôle de l'opérateur de jointure dans SQL ?",
+choices: ["Combiner les lignes de deux tables en une seule", "Séparer les lignes d'une table en deux", "Ne pas avoir d'impact sur les tables"],
+correctAnswer: "Combiner les lignes de deux tables en une seule"
+},
+{
+question: "Qu'est-ce qu'une clé primaire dans une base de données ?",
+choices: ["Une colonne unique pour chaque ligne d'une table", "Une colonne commune à plusieurs lignes d'une table", "Aucune des réponses précédentes"],
+correctAnswer: "Une colonne unique pour chaque ligne d'une table"
+},
+{
+question: "Que signifie le terme ACID en relation avec les transactions de bases de données ?",
+choices: ["Atomicité, Consistance, Isolation, Durabilité", "Altération, Consistance, Isolation, Durabilité", "Atomicité, Coopération, Isolation, Durabilité"],
+correctAnswer: "Atomicité, Consistance, Isolation, Durabilité"
+},
+{
+question: "Quelle est la définition d'un schéma de base de données ?",
+choices: ["La structure de la base de données, incluant les noms de tables, de colonnes et de relations", "Les données stockées dans la base de données", "L'interface utilisateur pour accéder à la base de données"],
+correctAnswer: "La structure de la base de données, incluant les noms de tables, de colonnes et de relations"
+},
+{
+question: "Quelle est la définition de la normalisation des données ?",
+choices: ["La suppression des doublons de données dans une base", "L'organisation logique des données dans une base pour minimiser les redondances et les incohérences", "L'ensemble des règles à respecter pour garantir la qualité des données enregistrées dans une base"],
+correctAnswer: "L'organisation logique des données dans une base pour minimiser les redondances et les incohérences"
+},
+
+{
+question: "Quel est l'objectif de l'entité-association en modélisation de données ?",
+choices: ["Modéliser les relations entre les objets d'une base de données", "Modéliser les données individuelles sans prendre en compte leur relation avec les autres", "Modéliser la structure de la base de données sans prendre en compte les données elles-mêmes"],
+correctAnswer: "Modéliser les relations entre les objets d'une base de données"
+},
+
+{
+question: "Qu'est-ce qu'une clé primaire en base de données ?",
+choices: ["Une colonne unique qui identifie de manière unique chaque enregistrement d'une table", "Une colonne qui permet de faire des liens entre les tables", "Une colonne qui ne contient aucune information importante"],
+correctAnswer: "Une colonne unique qui identifie de manière unique chaque enregistrement d'une table"
+},
+
+{
+question: "Qu'est-ce qu'un index en base de données ?",
+choices: ["Une structure de données qui permet de gagner en rapidité lors des recherches de données", "Une structure de données qui n'a aucune utilité en base de données", "Une structure de données qui permet de stocker des données en plusieurs exemplaires pour une meilleure sécurité"],
+correctAnswer: "Une structure de données qui permet de gagner en rapidité lors des recherches de données"
+},
+
+{
+question: "Que signifie le terme SQL en base de données ?",
+choices: ["Structured Query Language", "Sequential Query Language", "Simple Query Language"],
+correctAnswer: "Structured Query Language"
+},
+{
+question: "Quel est le but de l'indexation dans les bases de données ?",
+choices: ["Améliorer la performance pour les requêtes", "Réduire la taille de la base de données", "Rendre les données plus sûres"],
+correctAnswer: "Améliorer la performance pour les requêtes"
+},
+
+{
+question: "Qu'est-ce qu'une clé étrangère dans les bases de données relationnelles ?",
+choices: ["Une colonne qui référence une autre table", "Une colonne qui est utilisée pour joindre deux tables", "Une colonne qui empêche les données dupliquées"],
+correctAnswer: "Une colonne qui référence une autre table"
+},
+
+{
+question: "Quelle est la différence entre le modèle relationnel et le modèle en toile d'araignée dans les bases de données ?",
+choices: ["Le modèle relationnel utilise des relations entre des tables tandis que le modèle en toile d'araignée utilise des noeuds et des arcs", "Le modèle relationnel est plus simple tandis que le modèle en toile d'araignée est plus complexe", "Le modèle relationnel est utilisé pour les petites bases de données tandis que le modèle en toile d'araignée est utilisé pour les grandes bases de données"],
+correctAnswer: "Le modèle relationnel utilise des relations entre des tables tandis que le modèle en toile d'araignée utilise des noeuds et des arcs"
+},
+
+
+
+
+
+
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
