@@ -1,0 +1,213 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "What is self-expression?",
+choices: ["The act of expressing one's true thoughts, feelings, and emotions", "The act of hiding one's true thoughts, feelings, and emotions", "The act of following others' thoughts, feelings, and emotions", "None of the above"],
+correctAnswer: "The act of expressing one's true thoughts, feelings, and emotions"
+},
+
+{
+question: "What is the importance of self-expression?",
+choices: ["It helps individuals to understand and accept themselves", "It helps individuals to fit in with others", "It has no importance", "None of the above"],
+correctAnswer: "It helps individuals to understand and accept themselves"
+},
+
+{
+question: "What is self-identity?",
+choices: ["An individual's unique and personal perception of themselves", "An individual's perception of themselves based on others' opinions", "A shared perception of oneself among a group of people", "None of the above"],
+correctAnswer: "An individual's unique and personal perception of themselves"
+},
+
+{
+question: "What is the impact of social media on self-expression and identity?",
+choices: ["It provides a platform for individuals to express themselves and connect with others", "It creates pressure to conform to societal expectations and standards", "It has no impact", "None of the above"],
+correctAnswer: "It provides a platform for individuals to express themselves and connect with others"
+},
+
+{
+question: "What is the significance of personal style in self-expression?",
+choices: ["It reflects an individual's unique personality and identity", "It has no significance", "It represents conformity to societal expectations and standards", "None of the above"],
+correctAnswer: "It reflects an individual's unique personality and identity"
+},
+
+{
+question: "What is the role of creativity in self-expression?",
+choices: ["It allows individuals to express themselves in unique and imaginative ways", "It has no role in self-expression", "It restricts self-expression", "None of the above"],
+correctAnswer: "It allows individuals to express themselves in unique and imaginative ways"
+},
+
+{
+question: "What is the impact of self-expression on mental health?",
+choices: ["It can improve mental health by reducing stress and anxiety", "It can harm mental health by increasing stress and anxiety", "It has no impact on mental health", "None of the above"],
+correctAnswer: "It can improve mental health by reducing stress and anxiety"
+},
+
+{
+question: "What is the meaning of self-discovery?",
+choices: ["The process of exploring and learning about one's self", "The process of ignoring and avoiding one's self", "The process of conforming to societal expectations and standards", "None of the above"],
+correctAnswer: "The process of exploring and learning about one's self"
+},
+{
+question: "What is the role of self-expression in personal growth and development?",
+choices: ["It allows individuals to understand and accept themselves, leading to personal growth", "It hinders personal growth and development", "It has no impact on personal growth and development", "None of the above"],
+correctAnswer: "It allows individuals to understand and accept themselves, leading to personal growth"
+},
+
+{
+question: "What is the impact of external factors on self-expression and identity?",
+choices: ["External factors can influence an individual's self-expression and identity", "External factors have no impact on self-expression and identity", "External factors restrict self-expression and identity", "None of the above"],
+correctAnswer: "External factors can influence an individual's self-expression and identity"
+},
+
+{
+question: "What is the relationship between self-expression and communication?",
+choices: ["Self-expression is a form of communication", "Self-expression and communication are separate and unrelated", "Self-expression restricts communication", "None of the above"],
+correctAnswer: "Self-expression is a form of communication"
+},
+
+{
+question: "What is the importance of self-expression in relationships?",
+choices: ["It allows individuals to express themselves and connect with others on a deeper level", "It hinders relationships by restricting self-expression", "It has no impact on relationships", "None of the above"],
+correctAnswer: "It allows individuals to express themselves and connect with others on a deeper level"
+},
+
+{
+question: "What is the relationship between self-expression and confidence?",
+choices: ["Self-expression can increase an individual's confidence", "Self-expression decreases an individual's confidence", "Self-expression has no impact on confidence", "None of the above"],
+correctAnswer: "Self-expression can increase an individual's confidence"
+},
+
+{
+question: "What is the significance of self-expression in a career?",
+choices: ["It allows individuals to pursue their passions and interests, leading to career satisfaction", "It hinders career success by restricting self-expression", "It has no impact on career success", "None of the above"],
+correctAnswer: "It allows individuals to pursue their passions and interests, leading to career satisfaction"
+},
+
+{
+question: "What is the relationship between self-expression and authenticity?",
+choices: ["Self-expression is a form of authenticity", "Self-expression and authenticity are separate and unrelated", "Self-expression restricts authenticity", "None of the above"],
+correctAnswer: "Self-expression is a form of authenticity"
+},
+
+{
+question: "What is the impact of societal expectations and norms on self-expression and identity?",
+choices: ["Societal expectations and norms can shape and influence an individual's self-expression and identity", "Societal expectations and norms have no impact on self-expression and identity", "Societal expectations and norms restrict self-expression and identity", "None of the above"],
+correctAnswer: "Societal expectations and norms can shape and influence an individual's self-expression and identity"
+},
+{
+question: "What is the role of creativity in self-expression?",
+choices: ["Creativity is a key component of self-expression", "Creativity has no impact on self-expression", "Creativity restricts self-expression", "None of the above"],
+correctAnswer: "Creativity is a key component of self-expression"
+},
+
+{
+question: "What is the relationship between self-expression and personal identity?",
+choices: ["Self-expression helps individuals form and shape their personal identity", "Self-expression has no impact on personal identity", "Self-expression restricts personal identity", "None of the above"],
+correctAnswer: "Self-expression helps individuals form and shape their personal identity"
+},
+
+{
+question: "What is the impact of past experiences and memories on self-expression?",
+choices: ["Past experiences and memories can shape and influence an individual's self-expression", "Past experiences and memories have no impact on self-expression", "Past experiences and memories restrict self-expression", "None of the above"],
+correctAnswer: "Past experiences and memories can shape and influence an individual's self-expression"
+},
+
+{
+question: "What is the significance of self-expression in a community or social group?",
+choices: ["Self-expression allows individuals to connect with others and form relationships within a community or social group", "Self-expression hinders connections and relationships within a community or social group", "Self-expression has no impact on relationships within a community or social group", "None of the above"],
+correctAnswer: "Self-expression allows individuals to connect with others and form relationships within a community or social group"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
