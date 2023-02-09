@@ -1,0 +1,213 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quelle est la principale instance de socialisation en France?",
+choices: ["L'école", "La famille", "Les médias", "Les amis"],
+correctAnswer: "L'école"
+},
+
+{
+question: "Quelle est la fonction de la famille en matière de socialisation?",
+choices: ["Apporter des soins financiers", "Former les enfants aux normes et valeurs sociales", "Former les enfants aux compétences techniques", "Former les enfants aux compétences artistiques"],
+correctAnswer: "Former les enfants aux normes et valeurs sociales"
+},
+
+{
+question: "Quel est le facteur clé de la mobilité sociale en France?",
+choices: ["La richesse", "L'éducation", "L'origine ethnique", "Le sexe"],
+correctAnswer: "L'éducation"
+},
+
+{
+question: "Quel est l'objectif du travail en société?",
+choices: ["Assurer la subsistance de la personne", "Obtenir un salaire élevé", "Fournir une activité significative", "Tous les choix sont corrects"],
+correctAnswer: "Tous les choix sont corrects"
+},
+
+{
+question: "Qu'est-ce qui est le plus souvent associé à l'engagement politique en démocratie?",
+choices: ["L'âge", "Le sexe", "L'éducation", "La richesse"],
+correctAnswer: "L'éducation"
+},
+
+{
+question: "Qu'est-ce qui définit la structure de la société française?",
+choices: ["Les institutions publiques", "Les groupes sociaux", "Les relations de pouvoir", "Tous les choix sont corrects"],
+correctAnswer: "Tous les choix sont corrects"
+},
+
+{
+question: "Quelle est la principale fonction de l'école en matière de socialisation?",
+choices: ["Former les enfants aux normes et valeurs sociales", "Former les enfants aux compétences techniques", "Former les enfants aux compétences artistiques", "Apporter des soins financiers"],
+correctAnswer: "Former les enfants aux normes et valeurs sociales"
+},
+{
+question: "Quel est l'objectif principal des sociologues ?",
+choices: ["Comprendre les structures de la société", "Expliquer les comportements individuels", "Predict les événements futurs", "Proposer des solutions aux problèmes sociaux"],
+correctAnswer: "Comprendre les structures de la société"
+},
+
+{
+question: "Quelle est la principale source de socialisation primaire ?",
+choices: ["L'école", "La famille", "Les médias", "Les pairs"],
+correctAnswer: "La famille"
+},
+
+{
+question: "Quel est le rôle de l'école en matière de socialisation secondaire ?",
+choices: ["Renforcer les valeurs transmises par la famille", "Encourager la mobilité sociale", "Fournir une formation professionnelle", "Toutes les réponses ci-dessus"],
+correctAnswer: "Toutes les réponses ci-dessus"
+},
+
+{
+question: "Quelle est la définition de la mobilité sociale ?",
+choices: ["Le mouvement d'une personne dans la hiérarchie sociale", "Le changement de classe sociale d'une personne", "Le processus de changement de statut social", "Toutes les réponses ci-dessus"],
+correctAnswer: "Toutes les réponses ci-dessus"
+},
+
+{
+question: "Quel est l'impact du travail sur l'identité sociale ?",
+choices: ["Il permet la formation d'une identité sociale", "Il peut contribuer à la déstabilisation de l'identité sociale", "Il n'a aucun impact sur l'identité sociale", "Toutes les réponses ci-dessus"],
+correctAnswer: "Toutes les réponses ci-dessus"
+},
+
+{
+question: "Quelle est la définition de l'engagement politique ?",
+choices: ["La participation active à la vie politique", "L'investissement dans des activités politiques", "Le soutien à des causes politiques", "Toutes les réponses ci-dessus"],
+correctAnswer: "Toutes les réponses ci-dessus"
+},
+
+{
+question: "Quel est le lien entre engagement politique et démocratie ?",
+choices: ["L'engagement politique est nécessaire pour que la démocratie fonctionne", "L'engagement politique est une conséquence de la démocratie", "La démocratie n'a pas d'influence sur l'engagement politique", "Toutes les réponses ci-dessus"],
+correctAnswer: "L'engagement politique est nécessaire pour que la démocratie fonctionne"
+},
+{
+question: "Quel est le concept sociologique qui désigne l'ensemble des relations économiques, politiques et culturelles qui unissent les membres d'une société ?",
+choices: ["La structure sociale", "Le système social", "La stratification sociale", "Les normes sociales"],
+correctAnswer: "Le système social"
+},
+
+{
+question: "Quel est le terme sociologique qui désigne l'étude des groupes sociaux et des relations sociales qui les unissent ?",
+choices: ["La sociologie des groupes", "La sociologie des relations sociales", "La sociologie de la démocratie", "La sociologie des structures sociales"],
+correctAnswer: "La sociologie des groupes"
+},
+
+{
+question: "Qu'est-ce qui définit la mobilité sociale selon les sociologues ?",
+choices: ["Le mouvement des individus dans la hiérarchie sociale", "Le mouvement des groupes sociaux", "Le mouvement des classes sociales", "Le mouvement des castes sociales"],
+correctAnswer: "Le mouvement des individus dans la hiérarchie sociale"
+},
+
+{
+question: "Quel est le terme sociologique qui désigne les obligations et les interdits qui régissent le comportement des membres d'une société ?",
+choices: ["Les règles sociales", "Les normes sociales", "Les valeurs sociales", "Les principes sociaux"],
+correctAnswer: "Les normes sociales"
+},
+
+{
+question: "Quel est le rôle joué par l'école dans la socialisation des individus selon les sociologues ?",
+choices: ["Transmission de connaissances et de compétences", "Transmission de valeurs et de normes sociales", "Transmission de principes politiques et éthiques", "Transmission de toutes les dimensions de la culture"],
+correctAnswer: "Transmission de valeurs et de normes sociales"
+},
+
+{
+question: "Quel est le terme sociologique qui désigne les groupes sociaux qui contrôlent les moyens de production et d'échange dans une société ?",
+choices: ["Les élites", "Les classes dominantes", "Les castes supérieures", "Les groupes de pouvoir"],
+correctAnswer: "Les classes dominantes"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
