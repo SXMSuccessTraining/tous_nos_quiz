@@ -1,0 +1,214 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "What is the role of art in society?",
+choices: ["To entertain", "To educate", "To express social and political opinions", "All of the above"],
+correctAnswer: "All of the above"
+},
+
+{
+question: "What is the difference between fine art and commercial art?",
+choices: ["Fine art is for personal expression and commercial art is for profit", "Fine art is for museums and commercial art is for business", "There is no difference", "None of the above"],
+correctAnswer: "Fine art is for personal expression and commercial art is for profit"
+},
+
+{
+question: "What is the function of art criticism?",
+choices: ["To praise the artist", "To condemn the artist", "To analyze and interpret art", "To judge the artist's skill"],
+correctAnswer: "To analyze and interpret art"
+},
+
+{
+question: "What is the meaning of conceptual art?",
+choices: ["Art that relies on technical skill and craftsmanship", "Art that emphasizes the idea or concept behind the work", "Art that is purely decorative", "Art that is meant to shock"],
+correctAnswer: "Art that emphasizes the idea or concept behind the work"
+},
+
+{
+question: "What is the purpose of performance art?",
+choices: ["To entertain the audience", "To make a political statement", "To challenge traditional art forms", "All of the above"],
+correctAnswer: "All of the above"
+},
+
+{
+question: "What is the role of the artist in society?",
+choices: ["To reflect and comment on current events and social issues", "To provide escapism from reality", "To produce aesthetically pleasing objects", "All of the above"],
+correctAnswer: "All of the above"
+},
+
+{
+question: "What is the difference between art and propaganda?",
+choices: ["Art is neutral and propaganda is biased", "Art is intended to aesthetically please and propaganda is intended to influence", "Art is personal and propaganda is political", "None of the above"],
+correctAnswer: "Art is intended to aesthetically please and propaganda is intended to influence"
+},
+
+{
+question: "What is the impact of cultural appropriation in art?",
+choices: ["It enriches the art world", "It reinforces stereotypes and cultural hierarchies", "It promotes diversity and understanding", "None of the above"],
+correctAnswer: "It reinforces stereotypes and cultural hierarchies"
+},
+
+{
+question: "What is the purpose of political art?",
+choices: ["To express personal opinions and feelings", "To challenge power structures and raise awareness", "To make a profit", "None of the above"],
+correctAnswer: "To challenge power structures and raise awareness"
+},
+
+{
+question: "What is the significance of feminist art?",
+choices: ["To raise awareness about women's experiences and issues", "To celebrate femininity", "To challenge traditional gender roles", "All of the above"],
+correctAnswer: "To raise awareness about women's experiences and issues"
+},
+{
+question: "What is the purpose of public art?",
+choices: ["To beautify public spaces", "To educate the public", "To engage and empower communities", "All of the above"],
+correctAnswer: "All of the above"
+},
+
+{
+question: "What is the impact of gentrification on artists and the arts community?",
+choices: ["It provides artists with new opportunities", "It drives artists out of their neighborhoods and communities", "It has no impact", "None of the above"],
+correctAnswer: "It drives artists out of their neighborhoods and communities"
+},
+
+{
+question: "What is the significance of art therapy?",
+choices: ["It provides a therapeutic outlet for individuals with mental health issues", "It has no therapeutic value", "It is used for entertainment purposes", "None of the above"],
+correctAnswer: "It provides a therapeutic outlet for individuals with mental health issues"
+},
+
+{
+question: "What is the role of museums in society?",
+choices: ["To preserve and display works of art", "To provide educational opportunities", "To generate cultural and economic growth", "All of the above"],
+correctAnswer: "All of the above"
+},
+
+{
+question: "What is the impact of censorship in the arts?",
+choices: ["It restricts creative expression and limits the exchange of ideas", "It protects society from harmful content", "It has no impact", "None of the above"],
+correctAnswer: "It restricts creative expression and limits the exchange of ideas"
+},
+
+{
+question: "What is the function of outsider art?",
+choices: ["To challenge mainstream art", "To provide a platform for marginalized artists", "To depict unconventional themes and styles", "All of the above"],
+correctAnswer: "All of the above"
+},
+
+{
+question: "What is the significance of street art?",
+choices: ["It beautifies urban spaces and brings communities together", "It represents a form of vandalism and destruction", "It has no significance", "None of the above"],
+correctAnswer: "It beautifies urban spaces and brings communities together"
+},
+
+{
+question: "What is the impact of digital technology on the arts?",
+choices: ["It has expanded artistic possibilities and global access to art", "It has limited the value of traditional art forms", "It has no impact", "None of the above"],
+correctAnswer: "It has expanded artistic possibilities and global access to art"
+},
+
+{
+question: "What is the meaning of postmodern art?",
+choices: ["Art that challenges the traditional notion of beauty and artistic expression", "Art that adheres to traditional techniques and conventions", "Art that is purely decorative", "None of the above"],
+correctAnswer: "Art that challenges the traditional notion of beauty and artistic expression"
+},
+
+{
+question: "What is the purpose of art education?",
+choices: ["To provide students with technical skills and knowledge", "To foster creativity and critical thinking", "To prepare students for careers in the arts", "All of the above"],
+correctAnswer: "All of the above"
+}
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
