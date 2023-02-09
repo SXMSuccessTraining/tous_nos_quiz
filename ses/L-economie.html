@@ -1,0 +1,212 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Qu'est-ce que la croissance économique ?",
+choices: ["L'augmentation de la production de biens et de services d'un pays sur une période donnée", "La baisse de la production de biens et de services d'un pays sur une période donnée", "Le maintien constant de la production de biens et de services d'un pays sur une période donnée"],
+correctAnswer: "L'augmentation de la production de biens et de services d'un pays sur une période donnée"
+},
+
+{
+question: "Qu'est-ce que le chômage ?",
+choices: ["La situation où une personne est sans emploi mais cherche activement du travail", "La situation où une personne n'a pas besoin de travailler", "La situation où une personne est sans emploi et ne cherche pas de travail"],
+correctAnswer: "La situation où une personne est sans emploi mais cherche activement du travail"
+},
+
+{
+question: "Quelles sont les politiques économiques européennes ?",
+choices: ["Les politiques mises en place par l'Union européenne pour influencer l'économie des pays membres", "Les politiques mises en place par chaque pays membre de l'Union européenne indépendamment", "Les politiques mises en place par les pays hors de l'Union européenne"],
+correctAnswer: "Les politiques mises en place par l'Union européenne pour influencer l'économie des pays membres"
+},
+{
+question: "Quel est le but principal de la politique fiscale ?",
+choices: ["Stabiliser les prix et contrôler la quantité d'argent en circulation", "Influencer les taux d'intérêt sur les prêts", "Influencer le niveau de dépenses et de revenus du gouvernement pour stimuler l'économie"],
+correctAnswer: "Influencer le niveau de dépenses et de revenus du gouvernement pour stimuler l'économie"
+},
+
+{
+question: "Quelles sont les conséquences économiques d'une augmentation du taux d'intérêt ?",
+choices: ["Une augmentation des coûts pour les emprunteurs et une réduction des investissements", "Une réduction des coûts pour les emprunteurs et une augmentation des investissements", "Aucun impact sur les coûts pour les emprunteurs et les investissements"],
+correctAnswer: "Une augmentation des coûts pour les emprunteurs et une réduction des investissements"
+},
+
+{
+question: "Qu'est-ce qu'une politique protectionniste ?",
+choices: ["Une politique visant à encourager les entreprises nationales en restreignant les importations étrangères", "Une politique visant à encourager les entreprises étrangères en restreignant les importations nationales", "Une politique visant à encourager les entreprises nationales et étrangères sans restreindre les importations"],
+correctAnswer: "Une politique visant à encourager les entreprises nationales en restreignant les importations étrangères"
+},
+
+{
+question: "Qu'est-ce qu'une politique de dévaluation de la monnaie ?",
+choices: ["Une politique visant à rendre la monnaie nationale moins chère par rapport aux autres devises, afin de stimuler les exportations", "Une politique visant à rendre la monnaie nationale plus chère par rapport aux autres devises, afin de stimuler les importations", "Une politique visant à maintenir la valeur de la monnaie nationale par rapport aux autres devises"],
+correctAnswer: "Une politique visant à rendre la monnaie nationale moins chère par rapport aux autres devises, afin de stimuler les exportations"
+},
+{
+question: "Quel est l'objectif principal de la politique monétaire ?",
+choices: ["Stimuler l'économie en augmentant la demande agrégée", "Stabiliser l'économie en régulant les taux d'intérêt", "Influencer les taux de change pour améliorer la balance commerciale"],
+correctAnswer: "Stabiliser l'économie en régulant les taux d'intérêt"
+},
+
+{
+question: "Quel est le but principal de la politique budgétaire ?",
+choices: ["Stimuler l'économie en augmentant les dépenses publiques", "Stabiliser l'économie en régulant les déficits budgétaires", "Influencer les taux d'intérêt pour améliorer la croissance économique"],
+correctAnswer: "Stabiliser l'économie en régulant les déficits budgétaires"
+},
+
+{
+question: "Quelles sont les conséquences économiques d'une appréciation de la monnaie ?",
+choices: ["Une réduction des exportations et une augmentation des importations", "Une augmentation des exportations et une réduction des importations", "Aucun impact sur les exportations et les importations"],
+correctAnswer: "Une réduction des exportations et une augmentation des importations"
+},
+
+{
+question: "Qu'est-ce que le commerce international ?",
+choices: ["Les échanges économiques entre les pays", "Les échanges politiques entre les pays", "Les échanges culturels entre les pays"],
+correctAnswer: "Les échanges économiques entre les pays"
+},
+
+{
+question: "Qu'est-ce que le taux de chômage ?",
+choices: ["Le pourcentage de la population active sans emploi", "Le pourcentage de la population inactive sans emploi", "Le pourcentage de la population totale sans emploi"],
+correctAnswer: "Le pourcentage de la population active sans emploi"
+},
+
+{
+question: "Qu'est-ce qu'une crise financière ?",
+choices: ["Une perturbation grave sur les marchés financiers et les institutions financières", "Une perturbation grave sur les entreprises et les ménages", "Une perturbation grave sur les gouvernements et les banques centrales"],
+correctAnswer: "Une perturbation grave sur les marchés financiers et les institutions financières"
+},
+
+{
+question: "Qu'est-ce que la demande agrégée ?",
+choices: ["La somme de la consommation, de l'investissement, de la dépense publique et des exportations nettes", "La somme de la consommation, de l'investissement, de la dépense publique et des importations nettes", "La somme de la consommation, de l'investissement, des impôts et des subventions"],
+correctAnswer: "La somme de la consommation, de l'investissement, de la dépense publique et des exportations nettes"
+},
+
+{
+question: "Quel est l'impact d'une inflation élevée sur l'économie ?",
+choices: ["Une réduction de la demande agrégée et de la croissance économique", "Une augmentation de la demande agrégée et de la croissance économique", "Aucun impact sur la demande agrégée et la croissance économique"],
+correctAnswer: "Une réduction de la demande agrégée et de la croissance économique"
+},
+
+{
+question: "Qu'est-ce que la politique budgétaire restrictive ?",
+choices: ["Une politique budgétaire visant à réduire les déficits budgétaires par des réductions de dépenses et des augmentations d'impôts", "Une politique budgétaire visant à stimuler l'économie en augmentant les dépenses publiques et en réduisant les impôts", "Une politique budgétaire visant à encourager les entreprises à investir en baissant les impôts"],
+correctAnswer: "Une politique budgétaire visant à réduire les déficits budgétaires par des réductions de dépenses et des augmentations d'impôts"
+},
+{
+question: "Qu'est-ce qu'une politique monétaire restrictive ?",
+choices: ["Une politique monétaire visant à réduire la quantité de monnaie en circulation pour limiter l'inflation", "Une politique monétaire visant à augmenter la quantité de monnaie en circulation pour stimuler l'économie", "Une politique monétaire visant à encourager les entreprises à investir en augmentant les taux d'intérêt"],
+correctAnswer: "Une politique monétaire visant à réduire la quantité de monnaie en circulation pour limiter l'inflation"
+},
+
+{
+question: "Qu'est-ce que l'intégration économique européenne ?",
+choices: ["Le processus par lequel les pays européens se rapprochent économiquement en supprimant les barrières commerciales et en harmonisant les politiques économiques", "Le processus par lequel les pays européens s'isolent économiquement en érigeant des barrières commerciales et en désaccordant les politiques économiques", "Le processus par lequel les pays européens se désengagent de l'économie mondiale"],
+correctAnswer: "Le processus par lequel les pays européens se rapprochent économiquement en supprimant les barrières commerciales et en harmonisant les politiques économiques"
+},
+
+{
+question: "Qu'est-ce que l'économie mixte ?",
+choices: ["Une économie où les entreprises publiques et privées coexistent et coopèrent", "Une économie où les entreprises publiques sont dominantes", "Une économie où les entreprises privées sont dominantes"],
+correctAnswer: "Une économie où les entreprises publiques et privées coexistent et coopèrent"
+},
+
+{
+question: "Qu'est-ce que le chômage structurel ?",
+choices: ["Le chômage causé par des déséquilibres entre les offres et les demandes de travail dans différentes régions ou secteurs économiques", "Le chômage causé par des facteurs économiques conjoncturels tels que les cycles économiques et les récessions", "Le chômage causé par des obstacles structurels tels que la discrimination, la formation insuffisante et les barrières linguistiques"],
+correctAnswer: "Le chômage causé par des obstacles structurels tels que la discrimination, la formation insuffisante et les barrières linguistiques"
+},
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
