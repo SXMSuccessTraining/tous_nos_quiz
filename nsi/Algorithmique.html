@@ -1,0 +1,219 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quel est le but principal de l'algorithmique ?",
+choices: ["Résoudre des problèmes informatiques de manière efficace", "Apprendre à programmer en langage machine", "Créer des bases de données", "Concevoir des interfaces utilisateur"],
+correctAnswer: "Résoudre des problèmes informatiques de manière efficace"
+},
+
+{
+question: "Quel est le terme associé à la quantité de mémoire nécessaire pour exécuter un algorithme ?",
+choices: ["Espace de travail", "Complexité", "Optimisation", "Temps d'exécution"],
+correctAnswer: "Espace de travail"
+},
+
+{
+question: "Quel est le terme associé à la durée nécessaire pour exécuter un algorithme ?",
+choices: ["Espace de travail", "Complexité", "Optimisation", "Temps d'exécution"],
+correctAnswer: "Temps d'exécution"
+},
+
+{
+question: "Quel est le nom de la méthode qui consiste à comparer la performance de différents algorithmes pour résoudre un même problème ?",
+choices: ["Analyse de complexité", "Comparaison d'algorithmes", "Optimisation d'algorithmes", "Analyse statistique"],
+correctAnswer: "Analyse de complexité"
+},
+
+{
+question: "Quel est le terme associé à la vitesse à laquelle un algorithme s'exécute en fonction de la taille de son entrée ?",
+choices: ["Performance linéaire", "Performance exponentielle", "Performance logarithmique", "Performance polynomiale"],
+correctAnswer: "Performance logarithmique"
+},
+
+{
+question: "Quel est le nom de la méthode d'analyse de complexité qui consiste à évaluer le nombre d'opérations exécutées par un algorithme pour une entrée de taille n ?",
+choices: ["Analyse en O(n)", "Analyse en O(log n)", "Analyse en O(n^2)", "Analyse en O(n log n)"],
+correctAnswer: "Analyse en O(n)"
+},
+
+{
+question: "Quel est le nom de la méthode d'analyse de complexité qui consiste à évaluer le nombre d'opérations exécutées par un algorithme pour une entrée de taille n, en utilisant la fonction logarithmique ?",
+choices: ["Analyse en O(n)", "Analyse en O(log n)", "Analyse en O(n^2)", "Analyse en O(n log n)"],
+correctAnswer: "Analyse en O(log n)"
+},
+{
+question: "Qu'est-ce qu'une complexité temporelle d'un algorithme ?",
+choices: ["Le nombre de décisions prises par un algorithme", "Le temps d'exécution d'un algorithme", "La quantité de mémoire utilisée par un algorithme"],
+correctAnswer: "Le temps d'exécution d'un algorithme"
+},
+
+{
+question: "Qu'est-ce qu'une complexité spatiale d'un algorithme ?",
+choices: ["Le nombre de décisions prises par un algorithme", "Le temps d'exécution d'un algorithme", "La quantité de mémoire utilisée par un algorithme"],
+correctAnswer: "La quantité de mémoire utilisée par un algorithme"
+},
+
+{
+question: "En algorithme, qu'est-ce qu'une récursion ?",
+choices: ["Une fonction qui s'appelle elle-même pour résoudre un problème", "Une boucle infinie", "Un algorithme qui utilise des fonctions"],
+correctAnswer: "Une fonction qui s'appelle elle-même pour résoudre un problème"
+},
+
+{
+question: "Quel est l'avantage d'utiliser une recherche dichotomique pour trouver un élément dans un tableau trié ?",
+choices: ["La rapidité de la recherche", "La simplicité de l'algorithme", "La flexibilité de l'algorithme"],
+correctAnswer: "La rapidité de la recherche"
+},
+
+{
+question: "Quel est l'algorithme de tri le plus efficace en termes de complexité temporelle ?",
+choices: ["Tri par sélection", "Tri par insertion", "Tri rapide (QuickSort)"],
+correctAnswer: "Tri rapide (QuickSort)"
+},
+
+{
+question: "Quel est le but d'un algorithme de compression de données ?",
+choices: ["Réduire la taille des données en mémoire", "Améliorer la qualité des données", "Accélérer le temps d'exécution des algorithmes"],
+correctAnswer: "Réduire la taille des données en mémoire"
+},
+
+{
+question: "Quel est le but d'un algorithme de chiffrement de données ?",
+choices: ["Rendre les données illisibles aux utilisateurs non autorisés", "Améliorer la qualité des données", "Accélérer le temps d'exécution des algorithmes"],
+correctAnswer: "Rendre les données illisibles aux utilisateurs non autorisés"
+},
+{
+question: "Quel est l'objectif principal de la méthode de tri par insertion ?",
+choices: ["Trier rapidement un grand nombre d'éléments", "Trier un petit nombre d'éléments efficacement", "Trier les éléments selon leur poids"],
+correctAnswer: "Trier un petit nombre d'éléments efficacement"
+},
+
+{
+question: "Quel est le temps d'exécution théorique maximum de l'algorithme de tri rapide (Quick Sort) en fonction du nombre d'éléments à trier ?",
+choices: ["O(n log n)", "O(n^2)", "O(n)"],
+correctAnswer: "O(n^2)"
+},
+
+{
+question: "Quel est le but de l'algorithme de recherche dichotomique ?",
+choices: ["Trouver un élément spécifique dans un tableau trié rapidement", "Trier un tableau d'éléments", "Calculer la moyenne des éléments d'un tableau"],
+correctAnswer: "Trouver un élément spécifique dans un tableau trié rapidement"
+},
+
+{
+question: "Comment peut-on définir un algorithme récursif ?",
+choices: ["Un algorithme qui utilise des boucles pour résoudre un problème", "Un algorithme qui appelle lui-même pour résoudre un sous-problème", "Un algorithme qui utilise une table de hachage pour stocker les résultats intermédiaires"],
+correctAnswer: "Un algorithme qui appelle lui-même pour résoudre un sous-problème"
+},
+
+{
+question: "Quel est l'objectif de la programmation dynamique ?",
+choices: ["Résoudre des problèmes complexes en divisant le problème en sous-problèmes plus simples", "Résoudre des problèmes plus rapidement en utilisant des algorithmes efficaces", "Résoudre des problèmes sans prendre en compte les contraintes temporelles"],
+correctAnswer: "Résoudre des problèmes complexes en divisant le problème en sous-problèmes plus simples"
+},
+
+{
+question: "Qu'est-ce qu'un graphe orienté ?",
+choices: ["Un ensemble de nœuds connectés entre eux par des arcs qui ont une direction", "Un ensemble de nœuds connectés entre eux par des arcs sans direction", "Un ensemble de nœuds qui ne sont pas connectés entre eux"],
+correctAnswer: "Un ensemble de nœuds connectés entre eux par des arcs qui ont une direction"
+},
+
+
+
+
+
+
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
