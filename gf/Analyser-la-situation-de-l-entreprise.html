@@ -1,0 +1,212 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Comment l'évaluation des immobilisations amortissables à la clôture de l'exercice est-elle effectuée ?",
+choices: ["En comparant la valeur comptable avec la valeur de marché", "En comparant la valeur comptable avec la valeur d'achat", "En comparant la valeur de marché avec la valeur d'achat", "Aucune des trois"],
+correctAnswer: "En comparant la valeur comptable avec la valeur de marché"
+},
+{
+question: "Quelle est la méthode d'analyse la plus couramment utilisée pour évaluer la situation financière d'une entreprise ?",
+choices: ["Analyse des ratios financiers", "Analyse de la trésorerie", "Analyse des flux de trésorerie", "Analyse de la solvabilité"],
+correctAnswer: "Analyse des ratios financiers"
+},
+
+{
+question: "Quelles sont les informations les plus importantes à prendre en compte lors de l'analyse des états financiers ?",
+choices: ["Le bénéfice net", "Le chiffre d'affaires", "Les actifs et les passifs", "Toutes les réponses sont correctes"],
+correctAnswer: "Toutes les réponses sont correctes"
+},
+
+{
+question: "Quel est le but de l'analyse du compte de résultat d'une entreprise ?",
+choices: ["Comprendre la performance économique de l'entreprise", "Comprendre la structure financière de l'entreprise", "Comprendre les dépenses de l'entreprise", "Comprendre les entrées de fonds de l'entreprise"],
+correctAnswer: "Comprendre la performance économique de l'entreprise"
+},
+
+{
+question: "Quelle est la principale utilisation de l'analyse des ratios financiers ?",
+choices: ["Évaluer la performance financière de l'entreprise", "Évaluer la santé financière de l'entreprise", "Évaluer la rentabilité de l'entreprise", "Toutes les réponses sont correctes"],
+correctAnswer: "Toutes les réponses sont correctes"
+},
+
+{
+question: "Quel est l'objectif de l'analyse de la trésorerie d'une entreprise ?",
+choices: ["Comprendre les entrées et les sorties de fonds", "Comprendre la performance économique de l'entreprise", "Comprendre la structure financière de l'entreprise", "Comprendre les dépenses de l'entreprise"],
+correctAnswer: "Comprendre les entrées et les sorties de fonds"
+},
+
+{
+question: "Quel est l'objectif de l'analyse des flux de trésorerie d'une entreprise ?",
+choices: ["Comprendre les entrées et les sorties de fonds", "Comprendre la performance économique de l'entreprise", "Comprendre la structure financière de l'entreprise", "Comprendre les dépenses de l'entreprise"],
+correctAnswer: "Comprendre les entrées et les sorties de fonds"
+},
+{
+question: "Qu'est-ce que l'analyse financière d'une entreprise ?",
+choices: ["Un examen des finances d'une entreprise", "Une analyse des produits d'une entreprise", "Une analyse du marché d'une entreprise", "Une analyse des concurrents d'une entreprise"],
+correctAnswer: "Un examen des finances d'une entreprise"
+},
+
+{
+question: "Quelle est la principale raison de faire une analyse financière d'une entreprise ?",
+choices: ["Pour comprendre la situation financière de l'entreprise", "Pour connaître les coûts d'une entreprise", "Pour savoir combien d'argent une entreprise gagne", "Pour déterminer la valeur d'une entreprise"],
+correctAnswer: "Pour comprendre la situation financière de l'entreprise"
+},
+
+{
+question: "Qu'est-ce que la marge brute d'une entreprise ?",
+choices: ["Le montant total des ventes d'une entreprise", "Le montant total des coûts d'une entreprise", "Le montant total des dépenses d'une entreprise", "Le montant restant après déduction des coûts directes des ventes d'une entreprise"],
+correctAnswer: "Le montant restant après déduction des coûts directes des ventes d'une entreprise"
+},
+
+{
+question: "Quel est le but de l'analyse du compte de résultat d'une entreprise ?",
+choices: ["Pour comprendre les sources de revenus d'une entreprise", "Pour comprendre les coûts d'une entreprise", "Pour comprendre les dépenses d'une entreprise", "Pour comprendre le bénéfice ou la perte d'une entreprise"],
+correctAnswer: "Pour comprendre le bénéfice ou la perte d'une entreprise"
+},
+
+{
+question: "Quelle est la principale différence entre un actif et un passif ?",
+choices: ["Les actifs sont des sources de revenus, les passifs sont des coûts", "Les actifs sont des coûts, les passifs sont des sources de revenus", "Les actifs sont des sources de fonds, les passifs sont des utilisations de fonds", "Les actifs sont des utilisations de fonds, les passifs sont des sources de fonds"],
+correctAnswer: "Les actifs sont des sources de fonds, les passifs sont des utilisations de fonds"
+},
+{
+question: "Quel est l'objectif principal de l'analyse financière d'une entreprise ?",
+choices: ["Comprendre la situation financière de l'entreprise", "Prévoir les résultats futurs", "Déterminer la valeur de l'entreprise", "Tous les choix"],
+correctAnswer: "Tous les choix"
+},
+
+{
+question: "Comment calcule-t-on la marge brute d'une entreprise ?",
+choices: ["En soustrayant les coûts directs aux ventes totales", "En soustrayant les coûts indirects aux ventes totales", "En soustrayant les coûts totaux aux ventes totales", "En ajoutant les coûts directs aux ventes totales"],
+correctAnswer: "En soustrayant les coûts directs aux ventes totales"
+},
+
+{
+question: "Que signifie un ratio courant élevé pour une entreprise ?",
+choices: ["L'entreprise est en mesure de rembourser ses dettes à court terme avec facilité", "L'entreprise aura de la difficulté à rembourser ses dettes à court terme", "Le ratio n'a aucun impact sur la capacité de l'entreprise à rembourser ses dettes à court terme", "Aucun des choix"],
+correctAnswer: "L'entreprise est en mesure de rembourser ses dettes à court terme avec facilité"
+},
+
+{
+question: "Que signifie un ratio de liquidité élevé pour une entreprise ?",
+choices: ["L'entreprise peut facilement couvrir ses obligations à court terme", "L'entreprise aura de la difficulté à couvrir ses obligations à court terme", "Le ratio n'a aucun impact sur la capacité de l'entreprise à couvrir ses obligations à court terme", "Aucun des choix"],
+correctAnswer: "L'entreprise peut facilement couvrir ses obligations à court terme"
+},
+
+{
+question: "Comment mesure-t-on la rentabilité d'une entreprise ?",
+choices: ["En comparant les bénéfices aux actifs", "En comparant les bénéfices aux ventes", "En comparant les bénéfices aux coûts", "Tous les choix"],
+correctAnswer: "Tous les choix"
+},
+
+{
+question: "Comment mesure-t-on l'efficacité d'une entreprise ?",
+choices: ["En comparant les coûts aux ventes", "En comparant les bénéfices aux actifs", "En comparant les bénéfices aux coûts", "Tous les choix"],
+correctAnswer: "Tous les choix"
+},
+{
+question: "Comment évalue-t-on les passifs éventuels dans une analyse de la situation de l'entreprise ?",
+choices: ["En estimant la probabilité de leur survenance et en les valorisant", "En les incluant dans les actifs courants", "En les négligeant car ils sont peu probables", "En les incluant dans les actifs non courants"],
+correctAnswer: "En estimant la probabilité de leur survenance et en les valorisant"
+},
+
+{
+question: "Quel est l'objectif principal de l'analyse des ratios financiers dans une analyse de la situation de l'entreprise ?",
+choices: ["Comprendre les tendances de la performance financière", "Évaluer la performance relative à la concurrence", "Mesurer la rentabilité de l'entreprise", "Toutes les réponses ci-dessus"],
+correctAnswer: "Toutes les réponses ci-dessus"
+}
+
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
