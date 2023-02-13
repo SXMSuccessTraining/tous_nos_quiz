@@ -1,0 +1,203 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quelles sont les dimensions prises en compte pour évaluer la qualité de vie au travail dans les organisations ?",
+choices: ["Conditions matérielles de travail, santé et sécurité des travailleurs, organisation, durée et horaires du travail, rémunération", "Sécurité de l'emplacement de travail, formation des employés, horaires de travail souples", "Conditions environnementales de travail, commodités sur le lieu de travail, salaire et avantages sociaux"],
+correctAnswer: "Conditions matérielles de travail, santé et sécurité des travailleurs, organisation, durée et horaires du travail, rémunération"
+},
+{
+question: "Quelle est la définition de la responsabilité sociétale de l'organisation (RSE) ?",
+choices: ["L'engagement d'une entreprise à améliorer la qualité de vie des employés", "La mise en place de mesures pour minimiser les impacts environnementaux", "La conformité aux lois et réglementations en matière de relations de travail"],
+correctAnswer: "L'engagement d'une entreprise à améliorer la qualité de vie des employés"
+}
+
+{
+question: "Quelle est l'importance de la qualité de vie au travail pour la motivation des employés ?",
+choices: ["Faible impact", "Impact significatif", "Pas d'impact"],
+correctAnswer: "Impact significatif"
+}
+
+{
+question: "Quel est l'objectif de la mise en place de mesures ergonomiques sur un poste de travail ?",
+choices: ["Améliorer la productivité", "Maximiser le bien-être des employés", "Garantir la conformité aux lois en matière de santé et sécurité"],
+correctAnswer: "Maximiser le bien-être des employés"
+}
+
+{
+question: "Quelle est la définition de la souffrance au travail ?",
+choices: ["L'état de stress et de tension prolongé chez un employé", "L'absence d'accidents sur le lieu de travail", "La conformité aux lois en matière de santé et sécurité"],
+correctAnswer: "L'état de stress et de tension prolongé chez un employé"
+}
+
+{
+question: "Quel est le rôle de l'employeur en matière de prévention des risques psychosociaux ?",
+choices: ["Ignorer les risques", "Mettre en place des mesures de prévention", "Minimiser les coûts pour l'entreprise"],
+correctAnswer: "Mettre en place des mesures de prévention"
+}
+
+{
+question: "Qu'est-ce que l'évaluation des risques en matière de santé et de sécurité au travail ?",
+choices: ["L'analyse des dangers potentiels sur le lieu de travail", "L'ignorance des dangers sur le lieu de travail", "L'acceptation des dangers sur le lieu de travail"],
+correctAnswer: "L'analyse des dangers potentiels sur le lieu de travail"
+}
+{
+question: "Quelles sont les obligations de l'employeur en matière de santé et de sécurité au travail ?",
+choices: ["Evaluation des risques, actions de prévention, aménagement des locaux, équipements", "Formation des employés, horaires de travail souples", "Conditions environnementales de travail, commodités sur le lieu de travail"],
+correctAnswer: "Evaluation des risques, actions de prévention, aménagement des locaux, équipements"
+},
+{
+question: "Qu'est-ce que la qualité de vie au travail dans le cadre de la Responsabilité Sociétale de l'Organisation (RSE) ?",
+choices: ["Un ensemble de mesures prises par l'organisation pour améliorer la qualité de vie au travail de ses employés", "Une stratégie pour améliorer la performance économique de l'organisation", "Un concept sans réelle pertinence pour les organisations"],
+correctAnswer: "Un ensemble de mesures prises par l'organisation pour améliorer la qualité de vie au travail de ses employés"
+},
+{
+question: "Comment peut-on améliorer un poste de travail ?",
+choices: ["En adoptant des mesures simples de nature ergonomique", "En réduisant les horaires de travail", "En augmentant la rémunération des employés"],
+correctAnswer: "En adoptant des mesures simples de nature ergonomique"
+},
+{
+question: "Qu'est-ce que la souffrance au travail ?",
+choices: ["Un phénomène lié aux conditions de travail difficiles ou insatisfaisantes", "Un concept sans réelle pertinence pour les employés", "Un fait normal dans le monde du travail"],
+correctAnswer: "Un phénomène lié aux conditions de travail difficiles ou insatisfaisantes"
+},
+{
+question: "Qu'est-ce que le harcèlement au travail ?",
+choices: ["Une forme de violence psychologique ou physique dans le cadre du travail", "Une stratégie de gestion de ressources humaines", "Un phénomène qui n'existe pas dans les organisations"],
+correctAnswer: "Une forme de violence psychologique ou physique dans le cadre du travail"
+},
+{
+question: "Quel est le but du régime général de la sécurité sociale ?",
+choices: ["Prise en charge des accidents du travail et des maladies professionnelles", "Attractivité de l'organisation pour les employés", "Réduction du coût du travail pour l'organisation"],
+correctAnswer: "Prise en charge des accidents du travail et des maladies professionnelles"
+},
+{
+question: "Quelle est la définition du concept de Responsabilité Sociale des Entreprises (RSE)?",
+choices: ["L'engagement volontaire des entreprises à contribuer au développement économique et social du pays", "L'obligation des entreprises de prendre en compte les conséquences sociales et environnementales de leurs activités", "Le respect des lois et réglementations en matière de protection de l'environnement et des droits de l'homme"],
+correctAnswer: "L'engagement volontaire des entreprises à contribuer au développement économique et social du pays"
+},
+{
+question: "Quelle est la différence entre la qualité de vie au travail et la motivation des employés?",
+choices: ["La qualité de vie au travail dépend de la motivation des employés, mais inversement ce n'est pas toujours le cas", "La qualité de vie au travail dépend uniquement des conditions matérielles de travail", "La motivation des employés dépend uniquement de la rémunération"],
+correctAnswer: "La qualité de vie au travail dépend de la motivation des employés, mais inversement ce n'est pas toujours le cas"
+},
+{
+question: "Quels sont les risques psychosociaux auxquels sont confrontés les employés au travail?",
+choices: ["Stress, harcèlement, violence, isolement, burn-out", "Travail surmenant, dépression, anxiété, solitude", "Mauvaises relations avec les collègues, manque de reconnaissance, absence de perspectives d'évolution"],
+correctAnswer: "Stress, harcèlement, violence, isolement, burn-out"
+},
+{
+question: "Quel est le rôle de l'employeur en matière de santé et sécurité au travail?",
+choices: ["Assurer les conditions matérielles de travail, fournir les équipements de protection, évaluer les risques", "Prendre en charge les soins médicaux, former les employés aux bonnes pratiques de sécurité", "Veiller à ce que les employés suivent les consignes de sécurité"],
+correctAnswer: "Assurer les conditions matérielles de travail, fournir les équipements de protection, évaluer les risques"
+},
+{
+question: "Qu'est-ce que la rémunération individualisée?",
+choices: ["Une rémunération basée sur les performances individuelles des employés", "Une rémunération basée sur les compétences et les diplômes", "Une rémunération fixe pour tous les employés"],
+correctAnswer: "Une rémunération basée sur les performances individuelles des employés"
+},
+{
+question: "En quoi la responsabilité sociétale de l'organisation (RSE) peut-elle caractériser la qualité de vie au travail ?",
+choices: ["La RSE se concentre sur la protection de l'environnement et des communautés locales, mais n'a pas d'impact sur la qualité de vie au travail des employés", "La RSE implique la mise en place de pratiques éthiques et durables qui favorisent le bien-être des employés", "La RSE ne concerne que la rémunération et les avantages sociaux offerts aux employés"],
+correctAnswer: "La RSE implique la mise en place de pratiques éthiques et durables qui favorisent le bien-être des employés"
+},
+
+{
+question: "Comment peut-on mesurer la souffrance au travail et les risques psychosociaux dans les organisations ?",
+choices: ["En effectuant des entretiens individuels avec les employés et en analysant leurs témoignages", "En étudiant les absences fréquentes et les taux de rotation de personnel", "En utilisant des questionnaires anonymes et en collectant des données sur les indicateurs de performance"],
+correctAnswer: "En effectuant des entretiens individuels avec les employés et en analysant leurs témoignages"
+}
+
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
