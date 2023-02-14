@@ -1,0 +1,211 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Quel est le but de la recherche de cohésion au sein d'une organisation ?",
+choices: ["Améliorer les relations de travail et le climat social", "Détériorer les relations de travail et le climat social", "Ne pas avoir d'impact sur les relations de travail et le climat social"],
+correctAnswer: "Améliorer les relations de travail et le climat social"
+},
+
+{
+question: "Quels sont les avantages pour une organisation d'avoir une bonne cohésion ?",
+choices: ["Amélioration de la productivité, augmentation de la motivation et réduction des conflits", "Diminution de la productivité, démotivation et augmentation des conflits", "Aucun avantage"],
+correctAnswer: "Amélioration de la productivité, augmentation de la motivation et réduction des conflits"
+},
+
+{
+question: "Qu'est-ce qui peut contribuer à la création d'une bonne cohésion au sein d'une organisation ?",
+choices: ["Des activités de team-building, une communication ouverte et transparente, une reconnaissance des employés", "Des activités de team-building, une communication fermée et opaque, aucune reconnaissance des employés", "Aucune activité de team-building, une communication fermée et opaque, aucune reconnaissance des employés"],
+correctAnswer: "Des activités de team-building, une communication ouverte et transparente, une reconnaissance des employés"
+},
+{
+question: "Qu'est-ce qui constitue une unité entre les groupes dans une organisation ?",
+choices: ["Les intérêts particuliers de chaque groupe", "La recherche de cohésion", "Les conflits entre les groupes"],
+correctAnswer: "La recherche de cohésion"
+},
+
+{
+question: "Quel est le rôle du dialogue social dans la résolution des conflits sociaux ?",
+choices: ["Il n'a aucun rôle", "Il contribue à la résolution des conflits sociaux", "Il peut aggraver les conflits sociaux"],
+correctAnswer: "Il contribue à la résolution des conflits sociaux"
+},
+
+{
+question: "Quel est le but de l'étude du Thème 3 en spécialité RH de terminale ?",
+choices: ["Comprendre les relations professionnelles et les évolutions du climat social", "Ignorer les relations professionnelles et les évolutions du climat social", "Aggraver les relations professionnelles et le climat social"],
+correctAnswer: "Comprendre les relations professionnelles et les évolutions du climat social"
+},
+
+{
+question: "Quels sont les acteurs impliqués dans le dialogue social ?",
+choices: ["Les employés seulement", "Les employeurs seulement", "Les employeurs et les employés"],
+correctAnswer: "Les employeurs et les employés"
+},
+
+{
+question: "Quel est le but de la négociation collective ?",
+choices: ["Aggraver les relations professionnelles", "Résoudre les conflits entre employeurs et employés", "Ignorer les relations professionnelles et les conflits"],
+correctAnswer: "Résoudre les conflits entre employeurs et employés"
+},
+{
+question: "Quel est l'objectif principal de la recherche de cohésion dans une organisation ?",
+choices: ["Améliorer les relations de travail et le climat social", "Baisser les coûts", "Améliorer la performance"],
+correctAnswer: "Améliorer les relations de travail et le climat social"
+},
+
+{
+question: "Qu'est-ce qui peut menacer la cohésion au sein d'une organisation ?",
+choices: ["Les conflits entre les employés", "L'absence de conflits", "L'harmonie constante entre les employés"],
+correctAnswer: "Les conflits entre les employés"
+},
+
+{
+question: "Quel est le rôle du dialogue social dans la recherche de cohésion dans une organisation ?",
+choices: ["Il peut renforcer la cohésion", "Il peut la menacer", "Il n'a aucun impact sur la cohésion"],
+correctAnswer: "Il peut renforcer la cohésion"
+},
+
+{
+question: "Quel est l'objectif de la négociation collective en matière de gestion des ressources humaines ?",
+choices: ["Améliorer les conditions de travail", "Baisser les salaires", "Améliorer la performance"],
+correctAnswer: "Améliorer les conditions de travail"
+},
+
+{
+question: "Qu'est-ce que les indicateurs du bilan social peuvent mesurer dans une organisation ?",
+choices: ["Les données économiques et sociales", "Seulement les données économiques", "Seulement les données sociales"],
+correctAnswer: "Les données économiques et sociales"
+},
+{
+question: "Quel est le rôle du dialogue social dans la résolution des conflits internes à une organisation ?",
+choices: ["Il n'a aucun impact sur la résolution des conflits", "Il amplifie les conflits", "Il aide à surmonter les différences et à construire un consensus"],
+correctAnswer: "Il aide à surmonter les différences et à construire un consensus"
+},
+
+{
+question: "Quel est l'objectif principal de la négociation collective en matière de gestion des ressources humaines ?",
+choices: ["Favoriser les intérêts des employés", "Favoriser les intérêts de l'entreprise", "Trouver un compromis équitable entre les intérêts de l'entreprise et les intérêts des employés"],
+correctAnswer: "Trouver un compromis équitable entre les intérêts de l'entreprise et les intérêts des employés"
+},
+
+{
+question: "Comment peut-on caractériser les relations professionnelles dans une organisation ?",
+choices: ["En analysant les conflits entre employés et employeurs", "En observant les relations entre employés uniquement", "En étudiant les interactions entre les employés et les employeurs ainsi que les évolutions du climat social"],
+correctAnswer: "En étudiant les interactions entre les employés et les employeurs ainsi que les évolutions du climat social"
+},
+
+{
+question: "Quel est l'intérêt d'utiliser les indicateurs du bilan social pour évaluer la performance d'une organisation ?",
+choices: ["Il n'y a aucun intérêt car le bilan social ne reflète pas la réalité de la situation économique et sociale de l'entreprise", "Il permet d'évaluer uniquement la performance économique de l'entreprise", "Il permet d'avoir une vue d'ensemble sur la performance économique et sociale de l'entreprise"],
+correctAnswer: "Il permet d'avoir une vue d'ensemble sur la performance économique et sociale de l'entreprise"
+},
+
+{
+question: "Quel est le rôle des outils de communication en matière de gestion des ressources humaines dans une organisation ?",
+choices: ["Ils n'ont aucun impact sur les relations entre employés et employeurs", "Ils amplifient les conflits internes à l'entreprise", "Ils contribuent à améliorer les relations entre employés et employeurs"],
+correctAnswer: "Ils contribuent à améliorer les relations entre employés et employeurs"
+},
+{
+question: "Comment les indicateurs de la qualité de vie au travail peuvent-ils contribuer à renforcer la cohésion dans une organisation ?",
+choices: ["En mesurant les évaluations des employés concernant leurs conditions de travail", "En mesurant la satisfaction des employés quant aux avantages sociaux", "En mesurant les niveaux d'absentéisme et de rotation du personnel"],
+correctAnswer: "En mesurant les évaluations des employés concernant leurs conditions de travail"
+},
+
+{
+question: "Comment les mécanismes de participation et d'expression peuvent-ils contribuer à la résolution des conflits au sein d'une organisation ?",
+choices: ["En permettant aux employés de faire entendre leurs opinions sur les politiques et les décisions de l'organisation", "En donnant aux employés un moyen de se plaindre de leurs collègues", "En créant des forums de discussion pour les employés"],
+correctAnswer: "En permettant aux employés de faire entendre leurs opinions sur les politiques et les décisions de l'organisation"
+}
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
