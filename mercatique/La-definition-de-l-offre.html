@@ -1,0 +1,198 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+    "question": "Qu'est-ce que l'offre d'une entreprise ?",
+    "choices": ["L'ensemble des biens et des services proposés à la vente", "La publicité diffusée par l'entreprise", "Le nombre de salariés employés par l'entreprise", "Le montant des investissements réalisés par l'entreprise"],
+    "correctAnswer": "L'ensemble des biens et des services proposés à la vente"
+},
+{
+    "question": "Qu'est-ce que le marketing mix ?",
+    "choices": ["Les différentes stratégies marketing d'une entreprise", "L'ensemble des prix pratiqués par une entreprise", "La somme des budgets alloués à la publicité", "Les actions menées pour promouvoir un produit ou un service"],
+    "correctAnswer": "Les actions menées pour promouvoir un produit ou un service"
+},
+{
+    "question": "Quels sont les choix possibles pour construire une offre de bien ou de service ?",
+    "choices": ["Le choix des prix et des coûts de production", "Le choix des canaux de distribution", "Le choix de la gamme de produits proposés", "Tous les choix"],
+    "correctAnswer": "Tous les choix"
+},
+{
+    "question": "Comment peut-on caractériser les composantes d'une offre ?",
+    "choices": ["Le packaging, la marque et le prix", "Le packaging, le réseau de distribution et le chiffre d'affaires", "La qualité, la publicité et la clientèle ciblée", "La qualité, la marque et le prix"],
+    "correctAnswer": "La qualité, la marque et le prix"
+},
+{
+    "question": "Qu'est-ce que la politique de marque ?",
+    "choices": ["Le choix des couleurs utilisées pour le packaging d'un produit", "L'ensemble des actions menées pour créer et promouvoir une marque", "Le choix des canaux de distribution utilisés pour vendre un produit", "La rémunération des vendeurs"],
+    "correctAnswer": "L'ensemble des actions menées pour créer et promouvoir une marque"
+},
+{
+    "question": "Qu'est-ce que l'acte de consommation ?",
+    "choices": ["L'ensemble des processus qui précèdent l'achat d'un produit", "L'achat effectif d'un produit", "La décision de ne pas acheter un produit", "Le choix du mode de paiement"],
+    "correctAnswer": "L'achat effectif d'un produit"
+},
+{
+    "question": "Qu'est-ce que l'expérience de consommation ?",
+    "choices": ["L'ensemble des processus qui précèdent l'achat d'un produit", "L'achat effectif d'un produit", "Le choix du mode de paiement", "L'ensemble des processus qui suivent l'achat d'un produit"],
+    "correctAnswer": "L'ensemble des processus qui suivent l'achat d'un produit"
+},
+{
+    "question": "Qu'est-ce qu'un produit générique ?",
+    "choices": ["Un produit qui est vendu sans marque", "Un produit qui est fabriqué à l'étranger", "Un produit qui est vendu en grande quantité", "Un produit qui est vendu dans des emballages génériques"],
+    "correctAnswer": "Un produit qui est vendu sans marque"
+},
+{
+    "question": "Que signifie l'acronyme AIDA en marketing ?",
+    "choices": ["Attention, Intérêt, Désir, Action", "Analyse, Innovation, Décision, Action", "Approche, Identification, Démonstration, Accord", "Achat, Information, Décision, Attente"],
+    "correctAnswer": "Attention, Intérêt, Désir, Action"
+},
+{
+    "question": "Qu'est-ce qu'un produit d'appel en marketing ?",
+    "choices": ["Un produit qui est vendu à perte", "Un produit qui est utilisé pour attirer les clients dans un magasin", "Un produit qui est uniquement disponible en ligne", "Un produit qui est de qualité inférieure aux autres produits de la gamme"],
+    "correctAnswer": "Un produit qui est utilisé pour attirer les clients dans un magasin"
+},
+{
+    "question": "Qu'est-ce que le positionnement en marketing ?",
+    "choices": ["Le choix de la place où sera situé le magasin", "La détermination des caractéristiques du produit", "La création d'une image de marque dans l'esprit des consommateurs", "La fixation des prix en fonction de la concurrence"],
+    "correctAnswer": "La création d'une image de marque dans l'esprit des consommateurs"
+},
+{
+    "question": "Qu'est-ce que le prix psychologique en marketing ?",
+    "choices": ["Le prix le plus bas possible", "Le prix qui correspond à la valeur du produit", "Le prix qui semble être juste pour le consommateur", "Le prix qui est supérieur à celui de la concurrence"],
+    "correctAnswer": "Le prix qui semble être juste pour le consommateur"
+},
+{
+"question": "Comment peut-on caractériser une offre de bien ou de service ?",
+"choices": ["En prenant en compte ses dimensions matérielles et immatérielles", "En se basant sur sa qualité", "En considérant sa durée de vie", "Toutes les réponses sont correctes"],
+"correctAnswer": "En prenant en compte ses dimensions matérielles et immatérielles"
+},
+{
+"question": "Comment peut-on définir la notion de produit ?",
+"choices": ["Comme l'ensemble des biens et services proposés à la vente par une entreprise", "Comme l'ensemble des biens physiques proposés à la vente par une entreprise", "Comme l'ensemble des services proposés à la vente par une entreprise", "Comme l'ensemble des biens et services consommés par les ménages"],
+"correctAnswer": "Comme l'ensemble des biens et services proposés à la vente par une entreprise"
+},
+{
+"question": "Qu'est-ce que la segmentation de marché ?",
+"choices": ["La méthode qui consiste à évaluer la rentabilité de chaque marché", "La méthode qui consiste à diviser le marché en groupes homogènes de consommateurs", "La méthode qui consiste à choisir le segment de marché le plus attractif", "La méthode qui consiste à vendre plusieurs produits pour le même marché"],
+"correctAnswer": "La méthode qui consiste à diviser le marché en groupes homogènes de consommateurs"
+},
+{
+"question": "Qu'est-ce que la politique de prix d'une entreprise ?",
+"choices": ["L'ensemble des stratégies visant à fixer le prix des produits", "L'ensemble des techniques publicitaires utilisées pour promouvoir les produits", "L'ensemble des choix relatifs à la qualité des produits", "L'ensemble des décisions prises en matière de distribution des produits"],
+"correctAnswer": "L'ensemble des stratégies visant à fixer le prix des produits"
+},
+{
+"question": "Qu'est-ce qu'une marque de distributeur ?",
+"choices": ["Une marque créée par une entreprise pour commercialiser un produit de qualité supérieure", "Une marque créée par une entreprise pour commercialiser un produit vendu en exclusivité dans ses magasins", "Une marque créée par un distributeur pour commercialiser des produits sous son nom", "Une marque créée par une entreprise pour commercialiser un produit de faible qualité"],
+"correctAnswer": "Une marque créée par un distributeur pour commercialiser des produits sous son nom"
+},
+{
+"question": "Qu'est-ce que la fidélisation client ?",
+"choices": ["La stratégie marketing visant à attirer de nouveaux clients", "L'ensemble des techniques pour inciter un client à revenir et à acheter de nouveau", "La politique de prix visant à fidéliser les clients existants", "Le processus de recrutement des clients les plus fidèles"],
+"correctAnswer": "L'ensemble des techniques pour inciter un client à revenir et à acheter de nouveau"
+},
+{
+"question": "Qu'est-ce que la pyramide de Maslow en marketing ?",
+"choices": ["Une représentation graphique des différentes étapes de la prise de décision d'achat", "Une théorie sur la hiérarchie des besoins humains", "Un modèle mathématique pour prédire le comportement des consommateurs", "Un outil d'analyse des forces concurrentielles dans un marché"],
+"correctAnswer": "Une théorie sur la hiérarchie des besoins humains"
+},
+{
+"question": "Qu'est-ce que le positionnement en marketing ?",
+"choices": ["La façon dont un produit est perçu par les consommateurs par rapport aux produits concurrents", "La sélection des canaux de distribution pour un produit", "La fixation des prix pour un produit", "La création d'une nouvelle gamme de produits"],
+"correctAnswer": "La façon dont un produit est perçu par les consommateurs par rapport aux produits concurrents"
+},
+
+
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
