@@ -1,0 +1,201 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+  "question": "Qu'est-ce que la distribution d'un bien ou d'un service ?",
+  "choices": ["Le fait de produire un bien ou un service", "Le fait de stocker un bien ou un service", "Le fait de vendre un bien ou un service", "Le fait de livrer un bien ou un service"],
+  "correctAnswer": "Le fait de vendre un bien ou un service"
+},
+{
+  "question": "Quels sont les attributs de la distribution d'un produit ou d'un service ?",
+  "choices": ["Le coût, la qualité et la sécurité", "La proximité, le choix et la praticité", "L'efficacité, la flexibilité et la rapidité", "La satisfaction, la fidélisation et la rétention"],
+  "correctAnswer": "La proximité, le choix et la praticité"
+},
+{
+  "question": "Qu'est-ce que la valeur perçue par le client en matière de distribution ?",
+  "choices": ["Le coût total de possession du produit ou du service", "L'ensemble des avantages et des inconvénients de l'achat", "La qualité du produit ou du service", "Le niveau de satisfaction du client par rapport à l'achat"],
+  "correctAnswer": "L'ensemble des avantages et des inconvénients de l'achat"
+},
+{
+  "question": "Comment les choix de distribution affectent-ils la valeur perçue par le client ?",
+  "choices": ["Ils n'ont aucun effet sur la valeur perçue par le client", "Ils ont un effet positif sur la valeur perçue par le client", "Ils ont un effet négatif sur la valeur perçue par le client", "Ils peuvent avoir un effet positif ou négatif sur la valeur perçue par le client"],
+  "correctAnswer": "Ils peuvent avoir un effet positif ou négatif sur la valeur perçue par le client"
+},
+{
+  "question": "Qu'est-ce qui a fortement modifié les modèles économiques traditionnels et les chaînes de valeur ?",
+  "choices": ["Les pratiques commerciales des concurrents", "Les stratégies de numérisation des entreprises", "La demande croissante des clients", "Les changements démographiques de la population"],
+  "correctAnswer": "Les stratégies de numérisation des entreprises"
+},
+{
+  "question": "Comment les transformations numériques ont-elles modifié le consommateur ?",
+  "choices": ["Le consommateur est devenu moins exigeant", "Le consommateur est devenu moins éclairé", "Le consommateur est devenu moins volatile", "Le consommateur est devenu plus exigeant, plus éclairé et plus volatile"],
+  "correctAnswer": "Le consommateur est devenu plus exigeant, plus éclairé et plus volatile"
+},
+{
+"question": "Quelle est la différence entre la distribution exclusive et la distribution sélective ?",
+"choices": ["La distribution exclusive permet à un nombre limité de distributeurs de vendre le produit, tandis que la distribution sélective permet à un plus grand nombre de distributeurs de vendre le produit.", "La distribution exclusive permet à un grand nombre de distributeurs de vendre le produit, tandis que la distribution sélective permet à un nombre limité de distributeurs de vendre le produit.", "La distribution exclusive consiste à vendre un produit sur Internet, tandis que la distribution sélective consiste à le vendre en magasin.", "La distribution exclusive est réservée aux produits de luxe, tandis que la distribution sélective est réservée aux produits grand public."],
+"correctAnswer": "La distribution exclusive permet à un nombre limité de distributeurs de vendre le produit, tandis que la distribution sélective permet à un plus grand nombre de distributeurs de vendre le produit."
+},
+{
+"question": "Qu'est-ce que le dropshipping ?",
+"choices": ["Un mode de distribution où le distributeur vend des produits qu'il ne possède pas encore, mais qu'il commande auprès du fabricant ou d'un tiers une fois que la vente est réalisée.", "Un mode de distribution où le distributeur vend des produits qu'il a en stock dans son entrepôt.", "Un mode de distribution où le distributeur vend des produits qu'il a déjà vendus auparavant.", "Un mode de distribution où le distributeur vend des produits d'occasion."],
+"correctAnswer": "Un mode de distribution où le distributeur vend des produits qu'il ne possède pas encore, mais qu'il commande auprès du fabricant ou d'un tiers une fois que la vente est réalisée."
+},
+{
+"question": "Qu'est-ce que la distribution physique ?",
+"choices": ["La distribution d'un produit sur Internet.", "La distribution d'un produit dans des points de vente physiques tels que les magasins.", "La distribution d'un produit à travers un réseau de distributeurs.", "La distribution d'un produit à l'international."],
+"correctAnswer": "La distribution d'un produit dans des points de vente physiques tels que les magasins."
+},
+{
+"question": "Qu'est-ce que la distribution multicanale ?",
+"choices": ["La distribution d'un produit à travers un seul canal, généralement Internet.", "La distribution d'un produit à travers plusieurs canaux de distribution, tels que les points de vente physiques et Internet.", "La distribution d'un produit à travers des canaux de distribution internationaux.", "La distribution d'un produit à travers des canaux de distribution exclusifs."],
+"correctAnswer": "La distribution d'un produit à travers plusieurs canaux de distribution, tels que les points de vente physiques et Internet."
+},
+{
+"question": "Qu'est-ce que la distribution en libre-service ?",
+"choices": ["Un mode de distribution où les clients achètent directement le produit auprès du fabricant.", "Un mode de distribution où les clients achètent le produit auprès d'un vendeur en magasin.", "Un mode de distribution où les clients se servent eux-mêmes en magasin.", "Un mode de distribution où les clients achètent le produit sur Internet."],
+"correctAnswer": "Un mode de distribution où les clients se servent eux-mêmes en magasin."
+},
+{
+"question": "Quelle est la différence entre la distribution physique et la distribution virtuelle ?",
+"choices": ["La distribution physique se fait dans des magasins physiques, alors que la distribution virtuelle se fait en ligne", "La distribution physique se fait en gros, alors que la distribution virtuelle se fait en détail", "La distribution physique se fait en ville, alors que la distribution virtuelle se fait à la campagne", "La distribution physique se fait en B2C, alors que la distribution virtuelle se fait en B2B"],
+"correctAnswer": "La distribution physique se fait dans des magasins physiques, alors que la distribution virtuelle se fait en ligne"
+},
+{
+"question": "Qu'est-ce que la stratégie de distribution intensive ?",
+"choices": ["Une stratégie qui vise à limiter le nombre de points de vente pour augmenter l'exclusivité du produit", "Une stratégie qui vise à distribuer le produit dans un nombre limité de points de vente choisis avec soin", "Une stratégie qui vise à distribuer le produit dans un grand nombre de points de vente", "Une stratégie qui vise à distribuer le produit en ligne uniquement"],
+"correctAnswer": "Une stratégie qui vise à distribuer le produit dans un grand nombre de points de vente"
+},
+{
+"question": "Qu'est-ce que la logistique de distribution ?",
+"choices": ["Le choix des canaux de distribution pour un produit", "La gestion des stocks dans les entrepôts de distribution", "Le transport des produits des entrepôts de distribution vers les points de vente", "La gestion des retours de produits des points de vente vers les entrepôts de distribution"],
+"correctAnswer": "Le transport des produits des entrepôts de distribution vers les points de vente"
+},
+{
+"question": "Qu'est-ce qu'un réseau de distribution ?",
+"choices": ["Un ensemble de magasins physiques appartenant à une même enseigne", "Un ensemble de points de vente utilisés pour distribuer un produit", "Un ensemble de sites internet utilisés pour vendre un produit en ligne", "Un ensemble de fournisseurs utilisés pour approvisionner un entrepôt de distribution"],
+"correctAnswer": "Un ensemble de points de vente utilisés pour distribuer un produit"
+},
+{
+"question": "Qu'est-ce que la distribution sélective ?",
+"choices": ["Une stratégie qui vise à limiter le nombre de points de vente pour augmenter l'exclusivité du produit", "Une stratégie qui vise à distribuer le produit dans un nombre limité de points de vente choisis avec soin", "Une stratégie qui vise à distribuer le produit dans un grand nombre de points de vente", "Une stratégie qui vise à distribuer le produit en ligne uniquement"],
+"correctAnswer": "Une stratégie qui vise à distribuer le produit dans un nombre limité de points de vente choisis avec soin"
+},
+{
+"question": "Qu'est-ce que la praticité dans la distribution d'un bien ou d'un service ?",
+"choices": ["La possibilité pour le client d'acheter le produit directement en magasin", "La qualité de l'accueil du client lors de l'achat", "La capacité de la distribution à répondre rapidement aux besoins du client", "La facilité pour le client de se procurer le produit ou le service"],
+"correctAnswer": "La facilité pour le client de se procurer le produit ou le service"
+},
+
+{
+"question": "Qu'est-ce que l'accueil dans la distribution d'un bien ou d'un service ?",
+"choices": ["La qualité de l'environnement physique du point de vente", "La qualité de l'interaction entre le client et le vendeur", "La variété des produits proposés", "La capacité de la distribution à répondre rapidement aux besoins du client"],
+"correctAnswer": "La qualité de l'interaction entre le client et le vendeur"
+},
+
+{
+"question": "Qu'est-ce que le savoir-faire dans la distribution d'un bien ou d'un service ?",
+"choices": ["La qualité de l'environnement physique du point de vente", "La qualité de l'interaction entre le client et le vendeur", "La variété des produits proposés", "La capacité de la distribution à répondre rapidement aux besoins du client"],
+"correctAnswer": "La qualité de l'interaction entre le client et le vendeur"
+},
+
+{
+"question": "Qu'est-ce qu'un réseau de distribution direct ?",
+"choices": ["Un réseau de distribution dans lequel le fabricant vend directement au consommateur", "Un réseau de distribution dans lequel les produits sont vendus par l'intermédiaire d'un distributeur unique", "Un réseau de distribution dans lequel les produits sont vendus par l'intermédiaire de plusieurs distributeurs", "Un réseau de distribution dans lequel les produits sont vendus par l'intermédiaire de revendeurs indépendants"],
+"correctAnswer": "Un réseau de distribution dans lequel le fabricant vend directement au consommateur"
+},
+
+
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
