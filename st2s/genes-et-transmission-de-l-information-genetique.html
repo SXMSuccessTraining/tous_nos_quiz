@@ -1,0 +1,211 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Comment appelle-t-on l'ensemble des gènes présents dans une cellule ou un organisme ?",
+choices: ["Le génome", "Le transcriptome", "Le protéome"],
+correctAnswer: "Le génome"
+},
+
+{
+question: "Qu'est-ce qu'un allèle ?",
+choices: ["Une protéine codée par un gène", "Une mutation du matériel génétique", "Une version alternative d'un gène"],
+correctAnswer: "Une version alternative d'un gène"
+},
+
+{
+question: "Qu'est-ce que l'expression génique ?",
+choices: ["Le processus par lequel l'ADN est dupliqué avant la division cellulaire", "Le processus par lequel l'information génétique est transmise d'une génération à l'autre", "Le processus par lequel les instructions codées dans l'ADN sont utilisées pour produire des protéines"],
+correctAnswer: "Le processus par lequel les instructions codées dans l'ADN sont utilisées pour produire des protéines"
+},
+
+{
+question: "Qu'est-ce que la génétique moléculaire ?",
+choices: ["La branche de la génétique qui étudie les caractéristiques physiques des organismes", "La branche de la génétique qui étudie les liens de parenté entre les organismes", "La branche de la génétique qui étudie la structure et la fonction des gènes à l'échelle moléculaire"],
+correctAnswer: "La branche de la génétique qui étudie la structure et la fonction des gènes à l'échelle moléculaire"
+},
+
+{
+question: "Qu'est-ce qu'un génotype ?",
+choices: ["L'ensemble des caractères observables d'un individu", "L'ensemble des variations génétiques d'un individu", "L'ensemble des comportements d'un individu"],
+correctAnswer: "L'ensemble des variations génétiques d'un individu"
+},
+{
+question: "Quel est le rôle de l'ADN dans la transmission de l'information génétique ?",
+choices: ["L'ADN assure la synthèse des protéines", "L'ADN stocke l'information génétique", "L'ADN transporte les acides aminés"],
+correctAnswer: "L'ADN stocke l'information génétique"
+},
+
+{
+question: "Comment s'appelle le processus par lequel une cellule se divise pour donner deux cellules filles identiques ?",
+choices: ["La mitose", "La méiose", "La transduction"],
+correctAnswer: "La mitose"
+},
+
+{
+question: "Quel est le rôle des ARN messagers dans la synthèse des protéines ?",
+choices: ["Ils stockent l'information génétique", "Ils transportent les acides aminés", "Ils transmettent l'information génétique de l'ADN aux ribosomes"],
+correctAnswer: "Ils transmettent l'information génétique de l'ADN aux ribosomes"
+},
+
+{
+question: "Qu'est-ce qu'un allèle ?",
+choices: ["Une maladie génétique", "Une variation d'un gène", "Un groupe de gènes liés entre eux"],
+correctAnswer: "Une variation d'un gène"
+},
+
+{
+question: "Quelles sont les deux principales catégories de mutations génétiques ?",
+choices: ["Les mutations somatiques et les mutations germinales", "Les mutations silencieuses et les mutations non-silencieuses", "Les mutations ponctuelles et les mutations chromosomiques"],
+correctAnswer: "Les mutations ponctuelles et les mutations chromosomiques"
+},
+{
+  question: "Quel est le nom donné à l'ensemble des gènes d'un individu ?",
+  choices: ["Le génome", "Le phénotype", "Le génotype"],
+  correctAnswer: "Le génome"
+},
+{
+  question: "Qu'est-ce qu'un allèle ?",
+  choices: ["Un fragment d'ADN non codant", "Une molécule d'ARN messager", "Une version d'un gène"],
+  correctAnswer: "Une version d'un gène"
+},
+{
+  question: "Comment appelle-t-on le processus par lequel une cellule se divise en deux cellules filles identiques ?",
+  choices: ["La méiose", "La mitose", "La réplication"],
+  correctAnswer: "La mitose"
+},
+{
+  question: "Quelle est la fonction de l'ADN dans la cellule ?",
+  choices: ["Elle code pour les protéines", "Elle transporte les protéines", "Elle régule l'expression des gènes"],
+  correctAnswer: "Elle code pour les protéines"
+},
+{
+  question: "Qu'est-ce que la recombinaison génétique ?",
+  choices: ["La formation de nouvelles espèces à partir de deux espèces parentes", "La formation de nouvelles combinaisons d'allèles chez un individu", "Le remplacement de gènes défectueux par des gènes fonctionnels"],
+  correctAnswer: "La formation de nouvelles combinaisons d'allèles chez un individu"
+},
+{
+  question: "Qu'est-ce que l'ADN ?",
+  choices: ["Un acide aminé", "Une hormone", "Une molécule porteuse d'informations génétiques"],
+  correctAnswer: "Une molécule porteuse d'informations génétiques"
+},
+
+{
+  question: "Qu'est-ce qu'un allèle ?",
+  choices: ["Une forme alternative d'un même gène", "Un gène muté", "Un type de cellule"],
+  correctAnswer: "Une forme alternative d'un même gène"
+},
+
+{
+  question: "Qu'est-ce que la réplication de l'ADN ?",
+  choices: ["La fabrication d'une molécule d'ARN à partir d'un brin d'ADN", "La synthèse de deux molécules d'ADN identiques à partir d'une seule", "Le processus de transcription d'un gène en une protéine"],
+  correctAnswer: "La synthèse de deux molécules d'ADN identiques à partir d'une seule"
+},
+
+{
+  question: "Qu'est-ce qu'un gène dominant ?",
+  choices: ["Un gène qui s'exprime toujours, même en présence d'un autre allèle différent", "Un gène qui ne s'exprime que s'il est présent en double exemplaire", "Un gène qui n'a aucun effet sur le phénotype de l'organisme"],
+  correctAnswer: "Un gène qui s'exprime toujours, même en présence d'un autre allèle différent"
+},
+
+{
+  question: "Quel est le rôle de l'ARN messager (ARNm) dans la synthèse protéique ?",
+  choices: ["Il transporte les acides aminés jusqu'aux ribosomes", "Il catalyse la formation des liaisons peptidiques entre les acides aminés", "Il sert de matrice pour la synthèse de la protéine"],
+  correctAnswer: "Il sert de matrice pour la synthèse de la protéine"
+},
+
+
+
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
