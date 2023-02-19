@@ -1,0 +1,205 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Comment l'imagerie par résonance magnétique (IRM) permet-elle de visualiser les organes internes du corps humain ?",
+choices: ["En utilisant des rayons X pour créer des images en coupe de l'organe", "En détectant les ondes sonores réfléchies par les organes internes", "En utilisant un champ magnétique et des ondes radio pour créer des images en 3D de l'organe"],
+correctAnswer: "En utilisant un champ magnétique et des ondes radio pour créer des images en 3D de l'organe"
+},
+
+{
+question: "Qu'est-ce qu'un produit de contraste en imagerie médicale ?",
+choices: ["Une substance qui améliore la qualité des images produites par les scanners et les rayons X", "Une substance qui masque les images de parties du corps qui ne doivent pas être analysées", "Une substance qui est injectée dans le corps pour traiter les maladies"],
+correctAnswer: "Une substance qui améliore la qualité des images produites par les scanners et les rayons X"
+},
+
+{
+question: "Comment fonctionne la tomographie par émission de positons (TEP) en imagerie médicale ?",
+choices: ["En utilisant des rayons X pour créer des images en coupe de l'organe", "En détectant les ondes sonores réfléchies par les organes internes", "En détectant la radiation émise par des marqueurs radioactifs injectés dans le corps"],
+correctAnswer: "En détectant la radiation émise par des marqueurs radioactifs injectés dans le corps"
+},
+
+{
+question: "Comment les ultrasons sont-ils utilisés en imagerie médicale ?",
+choices: ["En produisant des images en 3D des organes internes du corps", "En mesurant les niveaux de radiation dans le corps", "En détectant les changements dans la conductivité électrique des tissus corporels"],
+correctAnswer: "En produisant des images en 3D des organes internes du corps"
+},
+
+{
+question: "Qu'est-ce que la chromatographie en phase liquide (CPL) ?",
+choices: ["Une technique d'analyse chimique qui sépare les composants d'un mélange en utilisant une phase mobile liquide et une phase stationnaire solide", "Une technique d'analyse chimique qui utilise un faisceau laser pour mesurer les concentrations de différentes substances dans un échantillon", "Une technique d'analyse chimique qui utilise des électrodes pour mesurer la conductivité d'un échantillon"],
+correctAnswer: "Une technique d'analyse chimique qui sépare les composants d'un mélange en utilisant une phase mobile liquide et une phase stationnaire solide"
+},
+
+{
+question: "Comment la tomographie par émission de positons (TEP) permet-elle de diagnostiquer certaines maladies ?",
+choices: ["En détectant la radioactivité émise par les marqueurs radioactifs injectés au patient", "En utilisant un champ magnétique pour visualiser les organes du corps", "En analysant la composition chimique des échantillons biologiques", "En irradiant les tissus avec des rayons X"],
+correctAnswer: "En détectant la radioactivité émise par les marqueurs radioactifs injectés au patient"
+},
+{
+question: "Comment les ultrasons sont-ils utilisés en imagerie médicale ?",
+choices: ["En envoyant des ondes sonores dans le corps pour créer des images des organes et des tissus", "En utilisant un champ magnétique pour visualiser les organes du corps", "En irradiant les tissus avec des rayons X", "En injectant des produits de contraste pour améliorer la visibilité des organes"],
+correctAnswer: "En envoyant des ondes sonores dans le corps pour créer des images des organes et des tissus"
+},
+{
+question: "Comment la spectrométrie de masse permet-elle d'identifier les composés chimiques présents dans un échantillon biologique ?",
+choices: ["En ionisant les molécules pour former des ions et en mesurant leur masse-charge", "En utilisant un champ magnétique pour séparer les différents composants de l'échantillon", "En détectant la radioactivité émise par les marqueurs radioactifs injectés au patient", "En irradiant les tissus avec des rayons X"],
+correctAnswer: "En ionisant les molécules pour former des ions et en mesurant leur masse-charge"
+},
+{
+question: "Comment la chromatographie permet-elle de séparer les différents composants d'un échantillon biologique ?",
+choices: ["En utilisant une colonne remplie d'un support pour séparer les différents composants en fonction de leur affinité pour ce support", "En envoyant des ondes sonores dans le corps pour créer des images des organes et des tissus", "En détectant la radioactivité émise par les marqueurs radioactifs injectés au patient", "En irradiant les tissus avec des rayons X"],
+correctAnswer: "En utilisant une colonne remplie d'un support pour séparer les différents composants en fonction de leur affinité pour ce support"
+},
+{
+question: "Comment la résonance magnétique nucléaire (RMN) permet-elle de déterminer la structure moléculaire des composés chimiques ?",
+choices: ["En utilisant un champ magnétique pour aligner les spins des noyaux atomiques et en mesurant les interactions entre ces spins", "En ionisant les molécules pour former des ions et en mesurant leur masse-charge", "En détectant la radioactivité émise par les marqueurs radioactifs injectés au patient", "En envoyant des ondes sonores dans le corps pour créer des images des organes et des tissus"],
+correctAnswer: "En utilisant un champ magnétique pour aligner les spins des noyaux atomiques et en mesurant les interactions entre ces spins"
+},
+{
+question: "Comment fonctionne un microscope électronique ?",
+choices: ["Il utilise des rayons X pour illuminer l'échantillon", "Il utilise un faisceau d'électrons pour illuminer l'échantillon", "Il utilise des ondes sonores pour illuminer l'échantillon"],
+correctAnswer: "Il utilise un faisceau d'électrons pour illuminer l'échantillon"
+},
+{
+question: "Comment la chromatographie permet-elle de séparer les composants d'un mélange ?",
+choices: ["En les faisant réagir chimiquement avec un réactif spécifique", "En les faisant passer à travers une membrane semi-perméable", "En les faisant se déplacer à des vitesses différentes dans une phase mobile et une phase stationnaire"],
+correctAnswer: "En les faisant se déplacer à des vitesses différentes dans une phase mobile et une phase stationnaire"
+},
+{
+question: "Qu'est-ce que la spectroscopie infrarouge ?",
+choices: ["Une technique qui mesure la conductivité électrique d'un échantillon", "Une technique qui mesure la rotation optique d'un échantillon", "Une technique qui mesure l'absorption de l'énergie électromagnétique par un échantillon"],
+correctAnswer: "Une technique qui mesure l'absorption de l'énergie électromagnétique par un échantillon"
+},
+{
+question: "Comment les tests sanguins peuvent-ils aider à diagnostiquer des maladies ?",
+choices: ["En mesurant les niveaux de glucose dans le sang", "En détectant la présence d'anticorps contre des agents pathogènes spécifiques", "En mesurant la densité des globules rouges dans le sang"],
+correctAnswer: "En détectant la présence d'anticorps contre des agents pathogènes spécifiques"
+},
+{
+question: "Comment la résonance magnétique nucléaire (RMN) permet-elle de déterminer la structure des molécules ?",
+choices: ["En mesurant la masse moléculaire des échantillons", "En mesurant la polarisation magnétique des échantillons", "En mesurant les interactions magnétiques entre les noyaux atomiques des échantillons"],
+correctAnswer: "En mesurant les interactions magnétiques entre les noyaux atomiques des échantillons"
+},
+{
+question: "Comment l'absorption de la lumière est-elle utilisée en spectrophotométrie ?",
+choices: ["Pour identifier des composants chimiques à partir de leur spectre d'absorption", "Pour mesurer la concentration d'un composé en solution", "Pour observer les interactions entre molécules dans un échantillon"],
+correctAnswer: "Pour mesurer la concentration d'un composé en solution"
+},
+
+{
+question: "Comment la chromatographie en phase gazeuse est-elle utilisée en analyse chimique ?",
+choices: ["Pour séparer les composants d'un mélange en utilisant leur affinité avec une phase stationnaire", "Pour mesurer la concentration de composés volatils dans un échantillon", "Pour observer les interactions entre molécules dans un échantillon"],
+correctAnswer: "Pour mesurer la concentration de composés volatils dans un échantillon"
+},
+
+{
+question: "Comment la résonance magnétique nucléaire est-elle utilisée en imagerie médicale ?",
+choices: ["Pour observer la structure des molécules dans un échantillon", "Pour mesurer la concentration de composés dans un échantillon", "Pour créer des images des tissus à l'intérieur du corps"],
+correctAnswer: "Pour créer des images des tissus à l'intérieur du corps"
+},
+
+{
+question: "Quel est le rôle des enzymes dans les analyses médicales ?",
+choices: ["D'identifier des composants chimiques à partir de leur spectre d'absorption", "De séparer les composants d'un mélange en utilisant leur affinité avec une phase stationnaire", "De catalyser des réactions chimiques pour mesurer la concentration de composés dans un échantillon"],
+correctAnswer: "De catalyser des réactions chimiques pour mesurer la concentration de composés dans un échantillon"
+},
+
+{
+question: "Comment les analyses isotopiques sont-elles utilisées pour le contrôle de la composition des milieux biologiques et naturels ?",
+choices: ["Pour mesurer la concentration de composés volatils dans un échantillon", "Pour identifier des composants chimiques à partir de leur spectre d'absorption", "Pour mesurer la proportion de différents isotopes dans un échantillon"],
+correctAnswer: "Pour mesurer la proportion de différents isotopes dans un échantillon"
+}
+    // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
