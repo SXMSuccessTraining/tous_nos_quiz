@@ -1,0 +1,152 @@
+<style>
+    #quiz {
+        background-color: rgb(250, 171, 82);
+        padding: 20px;
+    }
+    #questions h2 {
+        font-family: Arial;
+        font-size: 20px;
+    }
+    .choice {
+        font-family: Arial;
+        font-size: 16px;
+    }
+    #submit-btn, #score, #message {
+        font-family: Arial;
+        font-size: 16px;
+    }
+</style>
+<div id="quiz">
+    <div id="questions"></div>
+    <button id="submit-btn" onclick="checkAnswer()">Soumettre</button>
+</div>
+<div id="score"></div>
+<div id="message"></div>
+<script>
+var score = 0;
+var currentQuestion = 0;
+var questions = [
+{
+question: "Qu'est-ce que la politique sociale ?",
+choices: ["L'ensemble des actions menées par l'État pour répondre aux besoins sociaux", "La mise en place de règles et de lois pour lutter contre les problèmes sociaux", "Le soutien financier accordé aux associations caritatives"],
+correctAnswer: "L'ensemble des actions menées par l'État pour répondre aux besoins sociaux"
+},
+{
+question: "Qu'est-ce que l'action sociale ?",
+choices: ["L'ensemble des actions menées par les associations pour répondre aux besoins sociaux", "La mise en place de règles et de lois pour lutter contre les problèmes sociaux", "L'ensemble des actions menées par l'État pour répondre aux besoins sociaux"],
+correctAnswer: "L'ensemble des actions menées par les associations pour répondre aux besoins sociaux"
+},
+{
+question: "Quelles sont les caractéristiques des politiques sociales ?",
+choices: ["Elles sont mises en place par les associations", "Elles ont pour but de lutter contre les problèmes sociaux", "Elles sont mises en place par l'État pour répondre aux besoins sociaux"],
+correctAnswer: "Elles sont mises en place par l'État pour répondre aux besoins sociaux"
+},
+{
+question: "Quels sont les acteurs du dispositif d'action sociale ?",
+choices: ["Les associations", "Les collectivités publiques", "Les deux"],
+correctAnswer: "Les deux"
+},
+{
+question: "Qu'est-ce que la décentralisation dans le domaine de l'action sociale ?",
+choices: ["La mise en place d'un partenariat entre l'État et les collectivités locales", "La prise en charge des politiques sociales par les associations", "Le transfert de compétences de l'État vers les collectivités territoriales"],
+correctAnswer: "Le transfert de compétences de l'État vers les collectivités territoriales"
+},
+{
+question: "Qu'est-ce que la solidarité dans le domaine de l'action sociale ?",
+choices: ["Le fait de venir en aide aux personnes les plus démunies", "Le fait de travailler en collaboration avec les associations", "Le fait de respecter les règles établies par l'État"],
+correctAnswer: "Le fait de venir en aide aux personnes les plus démunies"
+},
+{
+question: "Qu'est-ce qu'un territoire d'action sociale ?",
+choices: ["Une zone géographique sur laquelle sont mises en place des politiques sociales", "Une association qui vient en aide aux personnes en difficulté", "Une collectivité territoriale qui gère les politiques sociales"],
+correctAnswer: "Une zone géographique sur laquelle sont mises en place des politiques sociales"
+},
+{
+question: "Qu'est-ce que la contractualisation dans le domaine de l'action sociale ?",
+choices: ["Le fait de signer des contrats avec des associations pour la mise en place de politiques sociales", "Le fait de respecter les règles établies par l'État en matière de politique sociale", "Le fait de mettre en place des partenariats entre les collectivités territoriales"],
+correctAnswer: "Le fait de signer des contrats avec des associations pour la mise en place de politiques sociales"
+},
+{
+question: "Qu'est-ce qu'un dispositif d'insertion sociale ?",
+choices: ["Un programme visant à aider les personnes en difficulté à trouver un emploi", "Un système d'aides financières pour les personnes âgées", "Un dispositif pour soutenir les familles en difficulté"],
+correctAnswer: "Un programme visant à aider les personnes en difficulté à trouver un emploi"
+},
+
+{
+question: "Qu'est-ce que la décentralisation dans le domaine de l'action sociale ?",
+choices: ["La mise en place d'un système de partenariat entre les différentes associations", "Le transfert de certaines compétences de l'État vers les collectivités territoriales", "L'augmentation du financement des politiques sociales par l'Union européenne"],
+correctAnswer: "Le transfert de certaines compétences de l'État vers les collectivités territoriales"
+},
+
+
+
+
+
+  // autres questions
+];
+
+    function displayQuestion() {
+        var questionEl = document.getElementById('questions');
+        questionEl.innerHTML = ''; // pour éviter de cumuler les questions
+
+        var questionTitleEl = document.createElement('h2');
+        questionTitleEl.textContent = questions[currentQuestion].question;
+        questionEl.appendChild(questionTitleEl);
+
+        var choicesEl = document.createElement('div');
+        choicesEl.setAttribute('id', 'choices');
+        questionEl.appendChild(choicesEl);
+
+        var choices = questions[currentQuestion].choices;
+        for (var i = 0; i < choices.length; i++) {
+            var choiceEl = document.createElement('div');
+            choiceEl.setAttribute('class', 'choice');
+
+            var inputEl = document.createElement('input');
+            inputEl.setAttribute('type', 'radio');
+            inputEl.setAttribute('name', 'choice');
+            inputEl.setAttribute('id', choices[i]);
+            choiceEl.appendChild(inputEl);
+
+            var labelEl = document.createElement('label');
+            labelEl.textContent = choices[i];
+            choiceEl.appendChild(labelEl);
+            choicesEl.appendChild(choiceEl);
+        }
+    }
+
+    window.onload = function() {
+        displayQuestion();
+    }
+
+    // vérifier la réponse choisie
+    function checkAnswer() {
+        var choice;
+        var choices = document.getElementsByName('choice');
+        for (var i = 0; i < choices.length; i++) {
+            if (choices[i].checked) {
+                choice = choices[i].id;
+                break;
+            }
+        }
+
+        if (choice === questions[currentQuestion].correctAnswer) {
+            score++;
+            alert("Bonne réponse!");
+        } else {
+            alert("Désolé, la réponse correcte était : " + questions[currentQuestion].correctAnswer);
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            displayQuestion();
+        } else {
+            displayScore();
+        }
+    }
+
+    // afficher le score final
+    function displayScore() {
+        var scoreEl = document.getElementById('score');
+        scoreEl.innerHTML = 'Votre score est: ' + score + '/' + questions.length;
+    }
+    </script>
